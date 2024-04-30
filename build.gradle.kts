@@ -17,9 +17,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
     implementation("com.xenomachina:kotlin-argparser:2.0.7")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation ("io.kotest:kotest-runner-junit5:5.8.1")
+    testImplementation ("io.kotest:kotest-assertions-core:5.8.1")
 }
 
-tasks.test {
+tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 

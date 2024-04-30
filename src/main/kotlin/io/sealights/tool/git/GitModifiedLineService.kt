@@ -4,6 +4,8 @@ import arrow.core.Either
 import io.sealights.tool.FileName
 import io.sealights.tool.Line
 import io.sealights.tool.LineList
+import io.sealights.tool.git.LineDetectResult.GIT_DIFF_LINE
+import io.sealights.tool.git.LineDetectResult.LINE_DIFF_LINE
 import mu.KotlinLogging
 import java.io.File
 import java.io.IOException
@@ -26,7 +28,7 @@ class GitModifiedLineService(
         endCommitHash: String?
     ): Either<Error, Map<FileName, LineList>> {
         val gitDiffOutput = gitDiffProviderService.gitDiffOutput(workspace, startCommitHash, "HEAD")
-        log.trace { "==== GIT DIFF OUTPUT START\n$gitDiffOutput\n==== GIT DIFF OUTPUT END" }
+        log.info { "==== GIT DIFF OUTPUT START\n${gitDiffOutput.joinToString("\n")}\n==== GIT DIFF OUTPUT END" }
 
         var currentFile: String? = null
         val result = HashMap<FileName, LineList>()
@@ -34,8 +36,8 @@ class GitModifiedLineService(
         for (diffOutputLine in gitDiffOutput) {
             val sectionLineDetectResult = detectLine(diffOutputLine)
             when (sectionLineDetectResult) {
-                LineDetectResult.GIT_DIFF_LINE -> currentFile = addNewFile(result, diffOutputLine)
-                LineDetectResult.LINE_DIFF_LINE -> addChangedLines(result, diffOutputLine, currentFile!!)
+                GIT_DIFF_LINE -> currentFile = addNewFile(result, diffOutputLine)
+                LINE_DIFF_LINE -> addChangedLines(result, diffOutputLine, currentFile!!)
                 else -> {}
             }
         }
@@ -95,10 +97,10 @@ class GitModifiedLineService(
     private fun detectLine(diffOutputLine: String): LineDetectResult {
         val matcher: Matcher = CHANGED_FILES_LINE_PATTERN.matcher(diffOutputLine)
         if (matcher.matches()) {
-            return LineDetectResult.GIT_DIFF_LINE
+            return GIT_DIFF_LINE
         }
         if (CHANGED_LINES_PATTERN.matcher(diffOutputLine).matches()) {
-            return LineDetectResult.LINE_DIFF_LINE
+            return LINE_DIFF_LINE
         }
         return LineDetectResult.UNEXPECTED_LINE
     }
@@ -114,8 +116,8 @@ class GitModifiedLineService(
 
 
     companion object {
-        private val CHANGED_FILES_LINE_PATTERN: Pattern = Pattern.compile("diff\\s--git\\sa/(.+) b/(.+)")
-        private val CHANGED_LINES_PATTERN: Pattern = Pattern.compile("@@\\s([+\\-,0-9]+)\\s([+\\-,0-9]+)\\s@@\\s(.*)")
+        private val CHANGED_FILES_LINE_PATTERN = Pattern.compile("diff\\s--git\\sa/(.+) b/(.+)")
+        private val CHANGED_LINES_PATTERN = Pattern.compile("@@\\s([+\\-,0-9]+)\\s([+\\-,0-9]+)\\s@@(.*)")
         private val log = KotlinLogging.logger {}
     }
 }

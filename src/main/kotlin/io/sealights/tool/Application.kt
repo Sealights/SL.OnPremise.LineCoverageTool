@@ -4,6 +4,7 @@ import arrow.core.flatMap
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.mainBody
 import io.sealights.tool.build.BuildLineService
+import io.sealights.tool.build.BuildLinesClient
 import io.sealights.tool.configuration.ApplicationArgParser
 import io.sealights.tool.configuration.Configuration
 import io.sealights.tool.footprints.FootprintsService
@@ -23,7 +24,7 @@ fun main(args: Array<String>) = mainBody {
 
     val gitDiffProviderService = GitDiffProviderService()
     val gitModifiedLineService = GitModifiedLineService(gitDiffProviderService)
-    val buildLineService = BuildLineService()
+    val buildLineService = BuildLineService(BuildLinesClient())
     val footprintsService = FootprintsService()
 
 
@@ -45,7 +46,7 @@ class CoverageTool(
 ) {
     fun run() {
         gitLinesService.modifiedFileLines(Configuration.workspace, Configuration.startCommit, "HEAD")
-            .flatMap { buildLineService.filter(it) }
+            .flatMap { buildLineService.mergeMethodNames(it) }
             .flatMap { footprintsService.appendLineExecutionData(it) }
 
     }
