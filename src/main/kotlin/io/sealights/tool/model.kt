@@ -1,10 +1,14 @@
 package io.sealights.tool
 
 typealias FileName = String
-typealias MethodName = String
 typealias LineList = MutableList<Line>
 
 typealias Errors = List<String>
+
+data class MethodName(
+    val uniqueId: String,
+    val displayName: String
+)
 
 data class MethodLines(
     val name: MethodName,
