@@ -2,17 +2,17 @@ package io.sealights.tool.footprints
 
 import arrow.core.Either
 import io.sealights.tool.FileName
-import io.sealights.tool.LineCoverage
-import io.sealights.tool.Method
-import io.sealights.tool.MethodLineCoverage
+import io.sealights.tool.LineWithCoverage
+import io.sealights.tool.MethodLines
+import io.sealights.tool.MethodLinesWithCoverage
 
 class FootprintsService {
-    fun appendLineExecutionData(it: Map<FileName, Method>): Either<Error, Map<FileName, Set<MethodLineCoverage>>> {
+    fun appendLineExecutionData(it: Map<FileName, List<MethodLines>>): Either<Error, Map<FileName, Set<MethodLinesWithCoverage>>> {
         return Either.Right(
             mapOf(
                 "file001" to setOf(
-                    MethodLineCoverage(
-                        "method", setOf(LineCoverage(12, true))
+                    MethodLinesWithCoverage(
+                        "method", listOf(LineWithCoverage(number = 12, modified = true, covered = true, content = ""))
                     )
                 )
             )

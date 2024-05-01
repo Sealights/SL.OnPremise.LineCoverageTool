@@ -6,22 +6,31 @@ typealias LineList = MutableList<Line>
 
 typealias Errors = List<String>
 
-data class LineCoverage(
-    val line: Int,
-    val executed: Boolean
-)
-
-data class Method(
+data class MethodLines(
     val name: MethodName,
     val lines: LineList
 )
 
-data class MethodLineCoverage(
+data class ScannedMethod(
     val name: MethodName,
-    val linesCoverage: Set<LineCoverage> 
+    val start: Int,
+    val end: Int
+)
+
+data class MethodLinesWithCoverage(
+    val name: MethodName,
+    val linesCoverage: List<LineWithCoverage> 
 )
 
 data class Line(
     val number: Int,
+    val modified: Boolean,
+    val content: String
+)
+
+data class LineWithCoverage(
+    val number: Int,
+    val modified: Boolean,
+    val covered: Boolean,
     val content: String
 )

@@ -10,7 +10,7 @@ class GitDiffProviderService {
     fun gitDiffOutput(workspace: String, baseCommit: String, endCommit: String?): List<String> {
         log.info { "git diff execution for workspace '$workspace', baseCommit '$baseCommit'" }
 
-        val gitLsTreeCommand = "git diff -U0 <base-commit>..<end-commit> <path-placeholder>".split(SPACE_PATTERN)
+        val gitLsTreeCommand = "git diff -U0 <base-commit>..<end-commit> <path-placeholder>".split(SPACE_OR_DOUBLE_DOTS_PATTERN)
             .dropLastWhile { it.isEmpty() }
             .toTypedArray()
 
@@ -18,6 +18,7 @@ class GitDiffProviderService {
         gitLsTreeCommand[gitLsTreeCommand.size - 2] = endCommit ?: "HEAD"
         gitLsTreeCommand[gitLsTreeCommand.size - 1] = workspace
 
+        log.info { "execute command: '${gitLsTreeCommand.joinToString(" ")}'" }
         val processBuilder = ProcessBuilder(*gitLsTreeCommand)
         var exitCode = -1
 
@@ -47,7 +48,7 @@ class GitDiffProviderService {
     }
 
     companion object {
-        val SPACE_PATTERN = "\\s".toRegex()
+        val SPACE_OR_DOUBLE_DOTS_PATTERN = "\\s|\\.\\.".toRegex()
         private val log = KotlinLogging.logger {}
     }
 }

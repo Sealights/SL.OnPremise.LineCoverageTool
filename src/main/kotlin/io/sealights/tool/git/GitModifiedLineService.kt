@@ -68,7 +68,7 @@ class GitModifiedLineService(
 
         if (split.size == 1) {
             val lines: MutableList<Line> = ArrayList()
-            lines.add(Line(split[0].toInt(), ""))
+            lines.add(Line(split[0].toInt(), true, ""))
             return lines
         }
         if (split.size == 2) {
@@ -77,7 +77,7 @@ class GitModifiedLineService(
             val lastLine = firstLine + changedLinesCount - 1
             val lines: MutableList<Line> = ArrayList(changedLinesCount)
             for (i in firstLine..lastLine) {
-                lines.add(Line(i, ""))
+                lines.add(Line(i, true, ""))
             }
             return lines
         }
