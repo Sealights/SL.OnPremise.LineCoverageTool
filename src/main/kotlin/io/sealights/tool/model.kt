@@ -1,6 +1,7 @@
 package io.sealights.tool
 
 typealias FileName = String
+typealias UniqueMethodId = String
 typealias LineList = MutableList<Line>
 
 typealias Errors = List<String>

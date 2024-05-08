@@ -7,7 +7,7 @@ import io.sealights.tool.LineList
 import io.sealights.tool.MethodLines
 import io.sealights.tool.ScannedMethod
 
-class BuildLineService (
+class BuildLineService(
     private val buildLinesClient: BuildLinesClient
 ) {
     fun mergeMethodNames(gitModifiedLines: Map<FileName, LineList>): Either<Error, Map<FileName, List<MethodLines>>> {
@@ -21,19 +21,21 @@ class BuildLineService (
                 createMethodWithLines(methodsForFiles[key]!!, lineList)
             }
             .toMap()
-        
+
         return Either.Right(mapped)
 
     }
 
     private fun createMethodWithLines(scannedMethods: List<ScannedMethod>, modifiedLinesList: List<Line>): List<MethodLines> {
-        return scannedMethods.map { scannedMethod -> 
-            MethodLines(scannedMethod.name, createLineListForMethod(scannedMethod.start, scannedMethod.end, modifiedLinesList))
-        }.toList()
+        return scannedMethods
+            .filter { scannedMethod -> scannedMethod.end > scannedMethod.start }
+            .map { scannedMethod ->
+                MethodLines(scannedMethod.name, createLineListForMethod(scannedMethod.start, scannedMethod.end, modifiedLinesList))
+            }.toList()
     }
 
     private fun createLineListForMethod(start: Int, end: Int, modifiedLinesList: List<Line>): MutableList<Line> {
-        return MutableList(end - start -1) { lineNumber ->
+        return MutableList(end - start - 1) { lineNumber ->
             val isLineModified = modifiedLinesList.any { line ->
                 line.number == lineNumber
             }
