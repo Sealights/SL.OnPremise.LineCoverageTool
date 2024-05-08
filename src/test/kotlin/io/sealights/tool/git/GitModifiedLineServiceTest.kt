@@ -3,6 +3,8 @@ package io.sealights.tool.git
 import io.kotest.core.spec.style.ShouldSpec
 import io.mockk.every
 import io.mockk.mockk
+import io.sealights.tool.source.GitDiffProviderService
+import io.sealights.tool.source.GitModifiedLineService
 import java.io.BufferedReader
 import java.io.InputStreamReader
 

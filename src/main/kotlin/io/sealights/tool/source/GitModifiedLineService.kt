@@ -1,11 +1,11 @@
-package io.sealights.tool.git
+package io.sealights.tool.source
 
 import arrow.core.Either
 import io.sealights.tool.FileName
 import io.sealights.tool.Line
 import io.sealights.tool.LineList
-import io.sealights.tool.git.LineDetectResult.GIT_DIFF_LINE
-import io.sealights.tool.git.LineDetectResult.LINE_DIFF_LINE
+import io.sealights.tool.source.LineDetectResult.GIT_DIFF_LINE
+import io.sealights.tool.source.LineDetectResult.LINE_DIFF_LINE
 import mu.KotlinLogging
 import java.io.File
 import java.io.IOException

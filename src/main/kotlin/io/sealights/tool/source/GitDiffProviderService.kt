@@ -1,4 +1,4 @@
-package io.sealights.tool.git
+package io.sealights.tool.source
 
 import mu.KotlinLogging
 import java.io.BufferedReader

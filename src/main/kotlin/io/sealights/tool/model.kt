@@ -30,7 +30,7 @@ data class MethodLinesWithCoverage(
 data class Line(
     val number: Int,
     val modified: Boolean,
-    val content: String
+    var content: String
 )
 
 data class LineWithCoverage(

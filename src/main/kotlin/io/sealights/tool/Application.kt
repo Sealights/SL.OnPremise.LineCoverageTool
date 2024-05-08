@@ -9,9 +9,10 @@ import io.sealights.tool.configuration.ApplicationArgParser
 import io.sealights.tool.configuration.Configuration
 import io.sealights.tool.footprints.CoverageClient
 import io.sealights.tool.footprints.FootprintsService
-import io.sealights.tool.git.GitDiffProviderService
-import io.sealights.tool.git.GitModifiedLineService
+import io.sealights.tool.source.GitDiffProviderService
+import io.sealights.tool.source.GitModifiedLineService
 import io.sealights.tool.report.ExcelReportFormater
+import io.sealights.tool.source.SourceCodeLineReader
 
 fun main(args: Array<String>) = mainBody {
     println("Sealights Line Level Coverage details")
@@ -29,12 +30,14 @@ fun main(args: Array<String>) = mainBody {
     val buildLineService = BuildLineService(BuildLinesClient())
     val footprintsService = FootprintsService(CoverageClient())
     val excelReportFormatter = ExcelReportFormater()
+    val sourceCodeLine = SourceCodeLineReader()
     
     val coverageTool = CoverageTool(
         gitModifiedLineService,
         buildLineService,
         footprintsService,
-        excelReportFormatter
+        excelReportFormatter,
+        sourceCodeLine
     )
 
     coverageTool.run()
@@ -46,11 +49,13 @@ class CoverageTool(
     private val gitLinesService: GitModifiedLineService,
     private val buildLineService: BuildLineService,
     private val footprintsService: FootprintsService,
-    private val excelReportFormatter: ExcelReportFormater
+    private val excelReportFormatter: ExcelReportFormater,
+    private val sourceCodeLine: SourceCodeLineReader
 ) {
     fun run() {
         gitLinesService.modifiedFileLines(Configuration.workspace, Configuration.startCommit, "HEAD")
             .flatMap { buildLineService.mergeMethodNames(it) }
+            .flatMap { sourceCodeLine.attacheLineContent(it) }
             .flatMap { footprintsService.appendLineExecutionData(it) }
             .flatMap { excelReportFormatter.createReport(it) }
     }
