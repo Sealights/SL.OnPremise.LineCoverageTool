@@ -11,7 +11,7 @@ import io.sealights.tool.footprints.CoverageClient
 import io.sealights.tool.footprints.FootprintsService
 import io.sealights.tool.source.GitDiffProviderService
 import io.sealights.tool.source.GitModifiedLineService
-import io.sealights.tool.report.ExcelReportFormater
+import io.sealights.tool.report.ExcelReportFormatter
 import io.sealights.tool.source.SourceCodeLineReader
 
 fun main(args: Array<String>) = mainBody {
@@ -29,7 +29,7 @@ fun main(args: Array<String>) = mainBody {
     val gitModifiedLineService = GitModifiedLineService(gitDiffProviderService)
     val buildLineService = BuildLineService(BuildLinesClient())
     val footprintsService = FootprintsService(CoverageClient())
-    val excelReportFormatter = ExcelReportFormater()
+    val excelReportFormatter = ExcelReportFormatter()
     val sourceCodeLine = SourceCodeLineReader()
     
     val coverageTool = CoverageTool(
@@ -49,7 +49,7 @@ class CoverageTool(
     private val gitLinesService: GitModifiedLineService,
     private val buildLineService: BuildLineService,
     private val footprintsService: FootprintsService,
-    private val excelReportFormatter: ExcelReportFormater,
+    private val excelReportFormatter: ExcelReportFormatter,
     private val sourceCodeLine: SourceCodeLineReader
 ) {
     fun run() {
