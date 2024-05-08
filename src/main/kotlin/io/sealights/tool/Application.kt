@@ -29,7 +29,7 @@ fun main(args: Array<String>) = mainBody {
     val gitModifiedLineService = GitModifiedLineService(gitDiffProviderService)
     val buildLineService = BuildLineService(BuildLinesClient())
     val footprintsService = FootprintsService(CoverageClient())
-    val excelReportFormatter = ExcelReportFormatter()
+    val excelReportFormatter = ExcelReportFormatter("lineCoverageReport", "Application Name / Develop / Build 4.12.14")
     val sourceCodeLine = SourceCodeLineReader()
     
     val coverageTool = CoverageTool(

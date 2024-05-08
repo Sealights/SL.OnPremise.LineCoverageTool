@@ -16,6 +16,10 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.3.14")
     implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
     implementation("com.xenomachina:kotlin-argparser:2.0.7")
+    
+    implementation("org.apache.poi:poi:5.2.5")
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation ("io.kotest:kotest-runner-junit5:5.8.1")
     testImplementation ("io.kotest:kotest-assertions-core:5.8.1")
