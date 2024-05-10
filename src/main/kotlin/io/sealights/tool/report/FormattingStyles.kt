@@ -21,7 +21,8 @@ object FormattingStyles {
     private val LIGHT_BLUE_COLOR = createXSSFColor(207, 226, 243)
     private val FONT_GRAY_COLOR = createXSSFColor(153, 153, 153)
     private val FONT_BLACK_COLOR = createXSSFColor(0, 0, 0)
-    private const val FONT_NAME_DEFAULT = "Calibri"
+    private val FONT_NAME_DEFAULT = readStringFromProperty("sl.style.font", "Calibri")
+    private val MONOSPACED_FONT_NAME_DEFAULT = readStringFromProperty("sl.style.monofont", "Courier New")
 
     fun createHeaderStyle(workbook: Workbook): CellStyle {
         val headerStyle = createCellStyle(workbook as XSSFWorkbook, fillColor = LIGHT_GRAY_COLOR)
@@ -55,7 +56,7 @@ object FormattingStyles {
 
     fun createSourceLineCellStyle(workbook: Workbook, modified: Boolean): CellStyle {
         val cellStyle = createCellStyle(workbook as XSSFWorkbook, fillColor = returnOnCondition(modified, LIGHT_BLUE_COLOR, LIGHTER_GRAY_COLOR))
-        val font = createFont(workbook)
+        val font = createFont(workbook, fontName = MONOSPACED_FONT_NAME_DEFAULT, fontHeightInPoints = 10)
         cellStyle.setFont(font)
 
         return cellStyle
@@ -104,5 +105,13 @@ object FormattingStyles {
 
     @OptIn(ExperimentalUnsignedTypes::class)
     private fun createXSSFColor(red: Int, green: Int, blue: Int) = XSSFColor(ubyteArrayOf(0u, red.toUByte(), green.toUByte(), blue.toUByte()).toByteArray())
+    
+    private fun <T> readStringFromProperty(propertyName: String, defaultValue: T): T {
+        val property = System.getProperty(propertyName)
+        if (property != null) {
+            return property as T
+        }
+        return defaultValue
+    }
 
 }

@@ -48,7 +48,6 @@ class ExcelReportFormatter(
         sourceModifiedCellStyle = FormattingStyles.createSourceLineCellStyle(workbook, true)
         coveredCellStyle = FormattingStyles.createCoveredCellStyle(workbook, true)
         uncoveredCellStyle = FormattingStyles.createCoveredCellStyle(workbook, false)
-
     }
 
     private fun createSourceCodeRows(dataToProcess: Map<FileName, Set<MethodLinesWithCoverage>>) {

@@ -23,7 +23,7 @@ class SourceCodeLineReader {
     }
 
     private fun getLineContent(fileLines: List<String>, number: Int): String = 
-        fileLines.getOrElse(number) { idx -> "--- line: $idx ---" }
+        fileLines.getOrElse(number - 1) { idx -> "--- line: $idx ---" }
 
 
     private fun readFileLines(physicalPath: FileName): List<String> {
