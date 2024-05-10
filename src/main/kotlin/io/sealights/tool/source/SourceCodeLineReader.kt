@@ -22,7 +22,7 @@ class SourceCodeLineReader {
         return Either.Right(methodLinesMap)
     }
 
-    private fun getLineContent(fileLines: List<String>, number: Int): String = 
+    private fun getLineContent(fileLines: List<String>, number: Int) = 
         fileLines.getOrElse(number - 1) { idx -> "--- line: $idx ---" }
 
 

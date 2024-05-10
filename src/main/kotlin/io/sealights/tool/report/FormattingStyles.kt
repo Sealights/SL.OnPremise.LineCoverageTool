@@ -3,7 +3,6 @@ package io.sealights.tool.report
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.Color
 import org.apache.poi.ss.usermodel.FillPatternType
-import org.apache.poi.ss.usermodel.IndexedColors
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFCellStyle
 import org.apache.poi.xssf.usermodel.XSSFColor
@@ -62,6 +61,14 @@ object FormattingStyles {
         return cellStyle
     }
 
+    fun codeChangeLineCellStyle(workbook: Workbook, modified: Boolean): CellStyle {
+        val cellStyle = createCellStyle(workbook as XSSFWorkbook, fillColor = returnOnCondition(modified, LIGHT_BLUE_COLOR, LIGHTER_GRAY_COLOR))
+        val font = createFont(workbook)
+        cellStyle.setFont(font)
+
+        return cellStyle
+    }
+    
     fun createCoveredCellStyle(workbook: Workbook, covered: Boolean): CellStyle {
         val cellStyle = createCellStyle(workbook as XSSFWorkbook, fillColor = returnOnCondition(covered, LIGHT_GREEN_COLOR, LIGHT_RED_COLOR))
         val font = createFont(workbook)
@@ -70,6 +77,14 @@ object FormattingStyles {
         return cellStyle
     }
 
+    fun createUncoverableCellStyle(workbook: Workbook, covered: Boolean): CellStyle {
+        val cellStyle = createCellStyle(workbook as XSSFWorkbook, fillColor = LIGHTER_GRAY_COLOR)
+        val font = createFont(workbook)
+        cellStyle.setFont(font)
+
+        return cellStyle
+    }
+    
     private fun createCellStyle(
         workbook: XSSFWorkbook,
         fillColor: Color = WHITE_COLOR,

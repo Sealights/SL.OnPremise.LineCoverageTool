@@ -2,6 +2,8 @@ package io.sealights.tool.report
 
 import arrow.core.Either
 import io.sealights.tool.FileName
+import io.sealights.tool.LineCoverage
+import io.sealights.tool.LineCoverage.COVERABLE
 import io.sealights.tool.LineWithCoverage
 import io.sealights.tool.MethodLinesWithCoverage
 import org.apache.poi.ss.usermodel.CellStyle
@@ -28,6 +30,9 @@ class ExcelReportFormatter(
     private lateinit var sourceModifiedCellStyle: CellStyle
     private lateinit var coveredCellStyle: CellStyle
     private lateinit var uncoveredCellStyle: CellStyle
+    private lateinit var uncoverableCellStyle: CellStyle
+    private lateinit var codeUnchngedCellStyle: CellStyle
+    private lateinit var codeChngedCellStyle: CellStyle
 
     fun createReport(dataToProcess: Map<FileName, Set<MethodLinesWithCoverage>>): Either<Error, String> {
         createExcelWorkbook()
@@ -46,8 +51,13 @@ class ExcelReportFormatter(
         lineNumberModifiedCellStyle = FormattingStyles.createLineNumberCellStyle(workbook, true)
         sourceCellStyle = FormattingStyles.createSourceLineCellStyle(workbook, false)
         sourceModifiedCellStyle = FormattingStyles.createSourceLineCellStyle(workbook, true)
+
+        codeUnchngedCellStyle = FormattingStyles.codeChangeLineCellStyle(workbook, false)
+        codeChngedCellStyle = FormattingStyles.codeChangeLineCellStyle(workbook, true)
+        
         coveredCellStyle = FormattingStyles.createCoveredCellStyle(workbook, true)
         uncoveredCellStyle = FormattingStyles.createCoveredCellStyle(workbook, false)
+        uncoverableCellStyle = FormattingStyles.createUncoverableCellStyle(workbook, false)
     }
 
     private fun createSourceCodeRows(dataToProcess: Map<FileName, Set<MethodLinesWithCoverage>>) {
@@ -92,14 +102,23 @@ class ExcelReportFormatter(
                 changedCodeCell.setCellValue(
                     if (lineWithCoverage.modified) "Yes" else "-"
                 )
-                changedCodeCell.cellStyle = if (lineWithCoverage.modified) sourceModifiedCellStyle else sourceCellStyle
+                changedCodeCell.cellStyle = if (lineWithCoverage.modified) codeChngedCellStyle else codeUnchngedCellStyle
                 
-                // changed code column
+                // covered code column
                 val coveredCodeCell = lineRow.createCell(Column.G)
                 coveredCodeCell.setCellValue(
-                    if (lineWithCoverage.covered) "Yes" else "No"
+                    if (lineWithCoverage.covered) "Yes" else {
+                        if (lineWithCoverage.coverability == COVERABLE) "No" else "-"
+                    }
                 )
-                coveredCodeCell.cellStyle = if (lineWithCoverage.covered) coveredCellStyle else uncoveredCellStyle
+                coveredCodeCell.cellStyle = if (lineWithCoverage.covered) coveredCellStyle else {
+                    if (lineWithCoverage.coverability == COVERABLE) {
+                        uncoveredCellStyle
+                    } else {
+                        uncoverableCellStyle
+                    }
+                    
+                }
             }
         }
     }

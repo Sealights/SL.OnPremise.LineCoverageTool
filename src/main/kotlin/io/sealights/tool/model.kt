@@ -37,5 +37,14 @@ data class LineWithCoverage(
     val number: Int,
     val modified: Boolean,
     val covered: Boolean,
-    val content: String
+    val content: String,
+    val coverability: LineCoverage
 )
+
+enum class LineCoverage {
+    COVERABLE,
+    EMPTY_LINE,
+    SINGLE_COMMENT,
+    MULTILINE_COMMENT,
+    NO_EXPRESSION
+}
