@@ -32,6 +32,12 @@ class BuildLinesClient {
                         uniqueId = "9 | public static V dev.futa.exec.NewReplicaMainJavaExecClass.main3[[Ljava/lang/String;] | ([Ljava/lang/String;)V | null",
                         displayName = "public static void main3(String[])"
                     ), 16, 17
+                ),
+                ScannedMethod(
+                    MethodName(
+                        uniqueId = "9 | public static V dev.futa.exec.NewReplicaMainJavaExecClass.commentsMethod[] | ()V | null",
+                        displayName = "public static void commentsMethod()"
+                    ), 21, 50
                 )
             ), "src/main/java/dev/futa/exec/NewUtil.java" to listOf(
                 ScannedMethod(
