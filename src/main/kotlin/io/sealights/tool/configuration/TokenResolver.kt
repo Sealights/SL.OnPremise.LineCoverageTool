@@ -3,6 +3,7 @@ package io.sealights.tool.configuration
 import arrow.core.Either
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import mu.KotlinLogging
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -27,8 +28,13 @@ class TokenResolver {
                 )
             )
         } catch (exception: Exception) {
+            log.error (exception) { "Could not fetch data from token `$jwtToken`" }
             return Either.Left("Could not extract data from provided token")
         }
+    }
+
+    companion object {
+        private val log = KotlinLogging.logger {}
     }
 }
 

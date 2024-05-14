@@ -12,14 +12,22 @@ class ApplicationArgParser(argParser: ArgParser) {
         "-w", "--workspace",
         help = "workspace"
     ).default(".")
-    val startCommit by argParser.storing(
-        "--startCommit",
+    val baseApp by argParser.storing(
+        "--baseApp",
+        help = "comparison base application name"
+    )
+    val baseBranch by argParser.storing(
+        "--baseBranch",
+        help = "comparison base branch name"
+    )
+    val baseBuild by argParser.storing(
+        "--baseBuild",
+        help = "comparison base build name"
+    )
+    val baseCommit by argParser.storing(
+        "--baseCommit",
         help = "start commit has"
     )
-    val endCommit by argParser.storing(
-        "--endCommit",
-        help = "end commit hash"
-    ).default("HEAD")
 
 //    fun set(token: String, startCommit: String, endCommit: String = "HEAD", workspace: String = ".") {
 //        Configuration.token = token

@@ -39,13 +39,13 @@ class HttpClient(
         val response = okHttpClient.newCall(request).execute()
         postProcessResponse(request, response)
     } catch (e: RuntimeException) {
-        log.error { "Could not fetch data from $url. THe reason is: `${e.message}` " }
+        log.error { "Could not fetch data from $url. The reason is: `${e.message}` " }
         Either.Left("Could not GET the data due to `${e.message}`")
     }
 
     private fun prepareRequestBuilder(url: String, queryParams: Map<String, String>, customHeaders: Map<String, String>): Request.Builder {
         val requestBuilder = Request.Builder()
-            .url(buildUrl(url, queryParams))
+            .url("$apiUrl/$url")
         addSealightsHeaders(requestBuilder)
         addCustomHeaders(requestBuilder, customHeaders)
         return requestBuilder
@@ -56,7 +56,7 @@ class HttpClient(
             log.debug { "Successfully get data from `${request.url}`." }
             Either.Right(response.body.toString())
         } else {
-            log.warn { "Error getting remote data from `${request.url}`. Status code: `${response.code}` and body `${response.body}`" }
+            log.warn { "Error getting remote data from `${request.url}`. Status code: `${response.code}` and body `${response.body?.string()}`" }
             Either.Left("Service `${request.url}` responded with status `${response.code}`")
         }
     }
@@ -68,10 +68,11 @@ class HttpClient(
     private fun addSealightsHeaders(requestBuilder: Request.Builder) {
         requestBuilder
             .addHeader(HEADER_ACCEPT, CONTENT_TYPE_JSON)
-            .addHeader(HEADER_AUTHORIZATION, token)
+            .addHeader(HEADER_AUTHORIZATION, "Bearer $token")
     }
 
     private fun buildUrl(url: String, queryParams: Map<String, String>): HttpUrl {
+        HttpUrl.Builder
         val httpUrlBuilder = HttpUrl.Builder().scheme("$apiUrl/$url")
         queryParams.forEach { (name, value) -> httpUrlBuilder.addQueryParameter(name, value) }
         return httpUrlBuilder.build()

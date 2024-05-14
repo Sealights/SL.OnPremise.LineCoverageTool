@@ -1,18 +1,28 @@
 package io.sealights.tool.buildmap
 
+import arrow.core.getOrElse
+import io.sealights.tool.ApplicationProcess
 import io.sealights.tool.FileName
 import io.sealights.tool.HttpClient
 import io.sealights.tool.MethodName
 import io.sealights.tool.ScannedMethod
+import mu.KotlinLogging
 
 class BuildLinesClient(private val httpClient: HttpClient) {
     
     fun getMethodsForFiles(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
-        httpClient.get("url", mapOf())
-        
-        return mapOf("asd" to listOf())
+        val buildMap = httpClient.get("tia/apps/appName/test-stages/testStage/build-range", mapOf())
+
+        return buildMap.map(::processResponse)
+            .mapLeft(ApplicationProcess::handleExit)
+            .getOrElse { mapOf() }
     }
-    
+
+    private fun processResponse(buildMapResponse: String): Map<FileName, List<ScannedMethod>> {
+        log.info { "processing build map response" }
+        return getMethodsForFiles2(setOf())
+    }
+
     fun getMethodsForFiles2(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
         return mapOf(
             "src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java" to listOf(
@@ -133,5 +143,7 @@ class BuildLinesClient(private val httpClient: HttpClient) {
             )
         )
     }
-
+    companion object {
+        private val log = KotlinLogging.logger {}
+    }
 }

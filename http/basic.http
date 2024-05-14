@@ -1,0 +1,2 @@
+GET https://dev-java3-gw.dev.sealights.co/api/tia/apps/appName/test-stages/testStage/build-range
+Authorization:  {{$auth.token("")}}

@@ -22,8 +22,9 @@ fun main(args: Array<String>) = mainBody {
     
     ArgParser(args).parseInto(::ApplicationArgParser)
         .run {
-            println("Token: $token")
             Configuration.build(this, tokenResolver)
+            Configuration.printConfiguration()
+            
         }
 
     println(Configuration.workspace)
@@ -34,7 +35,7 @@ fun main(args: Array<String>) = mainBody {
     val gitModifiedLineService = GitModifiedLineService(gitDiffProviderService)
     val buildLineService = BuildLineService(BuildLinesClient(httpClient))
     val footprintsService = FootprintsService(CoverageClient())
-    val excelReportFormatter = ExcelReportFormatter("lineCoverageReport", "Application Name / Develop / Build 4.12.14")
+    val excelReportFormatter = ExcelReportFormatter("lineCoverageReport", "${Configuration.baseApp} / ${Configuration.baseBranch} / ${Configuration.baseBuild}")
     val sourceCodeLine = SourceCodeLineReader()
     
     
@@ -60,7 +61,7 @@ class CoverageTool(
     private val sourceCodeLine: SourceCodeLineReader
 ) {
     fun run() {
-        gitLinesService.modifiedFileLines(Configuration.workspace, Configuration.startCommit, "HEAD")
+        gitLinesService.modifiedFileLines(Configuration.workspace, Configuration.baseCommit, "HEAD")
             .flatMap { buildLineService.mergeMethodNames(it) }
             .flatMap { sourceCodeLine.attacheLineContent(it) }
             .flatMap { footprintsService.appendLineExecutionData(it) }
