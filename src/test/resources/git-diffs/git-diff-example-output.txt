@@ -1,0 +1,111 @@
+diff --git a/autodesk2 b/autodesk2
+index 328d4d0..da38f6c 100644
+--- a/autodesk2
++++ b/autodesk2
+@@ -2 +2 @@
+-b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAlwAAAAdzc2gtcn
++33BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAlwAAAAdzc2gtcn
+@@ -9 +9 @@ BBzuJ2qUU09JJ0Oj8RixZ6Sbnhgdmra+JZ7cdDZcwApkPb0O4Fze6N99bPSIlt3J6JePUW
+-Q2z/EzRdtUeFfi3RXD2o8/WJRHh1vGbFGDl9AKs5YH9hK3uGY6UPoOV6fDHvG5eB0OHgpp
++32z/EzRdtUeFfi3RXD2o8/WJRHh1vGbFGDl9AKs5YH9hK3uGY6UPoOV6fDHvG5eB0OHgpp
+@@ -15 +15 @@ AEEA059/N2OZu7fQyEpmdi15Nd3g3aS6KnwFVaL5y9coRm9JhdKWPqva9IAgekyZi9mvi5
+-QHREvF0h0//KwHBtwtjwAAABhncmVnb3J5ZnV0YUBzZWFsaWdodHMuaW8B
++3HREvF0h0//KwHBtwtjwAAABhncmVnb3J5ZnV0YUBzZWFsaWdodHMuaW8B
+diff --git a/new-text-file.txt b/new-text-file.txt
+new file mode 100644
+index 0000000..1c63fb3
+Binary files /dev/null and b/new-text-file.txt differ
+diff --git a/pom.xml b/pom.xml
+index c892f10..d494ec9 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -14 +14 @@
+-        <buildName>skip-006-exclusion-flag-on</buildName>
++        <buildName>line-level-tool-001</buildName>
+@@ -317 +317 @@
+-                                <appName>veeva</appName>
++                                <appName>line-cover-tool</appName>
+@@ -322 +321,0 @@
+-                                <packagesexcluded>dev.futa.skipping.*</packagesexcluded>
+diff --git a/src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java b/src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java
+new file mode 100644
+index 0000000..8c682f2
+--- /dev/null
++++ b/src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java
+@@ -0,0 +1,18 @@
++package dev.futa.exec;
++
++public class NewReplicaMainJavaExecClass {
++  public static void main(String[] args) {
++    System.out.println("!!!!!!!!!!!!!!!");
++    System.out.println("!!!!!!!!!!!!!!!");
++    System.out.println("    MainJavaExecClass    ");
++    System.out.println("!!!!!!!!!!!!!!!");
++  }
++
++  public static void main2(String[] args) {
++    System.out.println("    MainJavaExecClass    ");
++  }
++
++  public static void main3(String[] args) {
++    System.out.println("    MainJavaExecClass.main3    ");
++  }
++}
+diff --git a/src/main/java/dev/futa/exec/NewUtil.java b/src/main/java/dev/futa/exec/NewUtil.java
+new file mode 100644
+index 0000000..a5369c6
+--- /dev/null
++++ b/src/main/java/dev/futa/exec/NewUtil.java
+@@ -0,0 +1,7 @@
++package dev.futa.exec;
++
++public class NewUtil {
++    public static boolean alwaysTrue() {
++        return true;
++    }
++}
+diff --git a/src/main/java/dev/futa/skipping/Aaaa05.java b/src/main/java/dev/futa/skipping/Aaaa05.java
+index cbb7786..5bcd1fa 100644
+--- a/src/main/java/dev/futa/skipping/Aaaa05.java
++++ b/src/main/java/dev/futa/skipping/Aaaa05.java
+@@ -19,0 +20,4 @@ public class Aaaa05 {
++    System.out.println("Lines added to existing method 1");
++    System.out.println("Lines added to existing method 2");
++    // and last one
++    System.out.println("Lines added to existing method 3");
+@@ -23,0 +28,7 @@ public class Aaaa05 {
++    System.out.println(this.getClass().getCanonicalName() + " method004() ");
++    System.out.println("Modified content of the single line");
++    return "response";
++  }
++
++  public String newlyAddedMethod(int val01, int val02) {
++    // single line comment
+@@ -25,0 +37,3 @@ public class Aaaa05 {
++    /*
++      Multiple lines comment
++     */
+diff --git a/src/main/java/dev/futa/skipping/Bbbb05.java b/src/main/java/dev/futa/skipping/Bbbb05.java
+index e0b0507..1477660 100644
+--- a/src/main/java/dev/futa/skipping/Bbbb05.java
++++ b/src/main/java/dev/futa/skipping/Bbbb05.java
+@@ -2,0 +3,4 @@ package dev.futa.skipping;
++import java.util.Objects;
++import java.util.Set;
++import java.util.stream.Collectors;
++
+@@ -29,4 +33,10 @@ public class Bbbb05 {
+-  public String method005(int val01) {
+-    System.out.println(this.getClass().getCanonicalName() + " method003() ");
+-    System.out.println("blah blah asdblah");
+-    return "response";
++  public String modifiedLongSignatureMethod(int val01,
++      String pringSomethig,
++      Set<String> pringSomethigInResonse) {
++    // comment
++    System.out.println(this.getClass().getCanonicalName() + " method003() " + val01);
++    System.out.println("blah blah asdblah" + pringSomethig);
++    
++    return "response " + pringSomethigInResonse.stream()
++        .filter(Objects::nonNull)
++        .collect(Collectors.joining(", "));

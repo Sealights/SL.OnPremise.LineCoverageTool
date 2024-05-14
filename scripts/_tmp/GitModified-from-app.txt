@@ -1,0 +1,26 @@
+diff --git a/src/main/kotlin/io/sealights/tool/git/GitModifiedLineService.kt b/src/main/kotlin/io/sealights/tool/git/GitModifiedLineService.kt
+index db092e3..2eefafb 100644
+--- a/src/main/kotlin/io/sealights/tool/git/GitModifiedLineService.kt
++++ b/src/main/kotlin/io/sealights/tool/git/GitModifiedLineService.kt
+@@ -6,0 +7,2 @@ import io.sealights.tool.LineList
++import io.sealights.tool.git.LineDetectResult.GIT_DIFF_LINE
++import io.sealights.tool.git.LineDetectResult.LINE_DIFF_LINE
+@@ -29 +31 @@ class GitModifiedLineService(
+-        log.trace { "==== GIT DIFF OUTPUT START\n$gitDiffOutput\n==== GIT DIFF OUTPUT END" }
++        log.info { "==== GIT DIFF OUTPUT START\n${gitDiffOutput.joinToString("\n")}\n==== GIT DIFF OUTPUT END" }
+@@ -37,2 +39,2 @@ class GitModifiedLineService(
+-                LineDetectResult.GIT_DIFF_LINE -> currentFile = addNewFile(result, diffOutputLine)
+-                LineDetectResult.LINE_DIFF_LINE -> addChangedLines(result, diffOutputLine, currentFile!!)
++                GIT_DIFF_LINE -> currentFile = addNewFile(result, diffOutputLine)
++                LINE_DIFF_LINE -> addChangedLines(result, diffOutputLine, currentFile!!)
+@@ -98 +100 @@ class GitModifiedLineService(
+-            return LineDetectResult.GIT_DIFF_LINE
++            return GIT_DIFF_LINE
+@@ -101 +103 @@ class GitModifiedLineService(
+-            return LineDetectResult.LINE_DIFF_LINE
++            return LINE_DIFF_LINE
+@@ -117,2 +119,2 @@ class GitModifiedLineService(
+-        private val CHANGED_FILES_LINE_PATTERN: Pattern = Pattern.compile("diff\\s--git\\sa/(.+) b/(.+)")
+-        private val CHANGED_LINES_PATTERN: Pattern = Pattern.compile("@@\\s([+\\-,0-9]+)\\s([+\\-,0-9]+)\\s@@\\s(.*)")
++        private val CHANGED_FILES_LINE_PATTERN = Pattern.compile("diff\\s--git\\sa/(.+) b/(.+)")
++        private val CHANGED_LINES_PATTERN = Pattern.compile("@@\\s([+\\-,0-9]+)\\s([+\\-,0-9]+)\\s@@(.*)")
