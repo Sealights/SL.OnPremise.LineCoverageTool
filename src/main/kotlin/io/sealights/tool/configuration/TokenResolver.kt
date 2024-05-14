@@ -21,6 +21,7 @@ class TokenResolver {
 
             return Either.Right(
                 TokenData(
+                    token = jwtToken,
                     role = fromJson["x-sl-role"] as String,
                     apiUrl = fromJson["x-sl-server"] as String
                 )
@@ -32,6 +33,7 @@ class TokenResolver {
 }
 
 data class TokenData(
+    val token: String,
     val role: String,
     val apiUrl: String
 )
