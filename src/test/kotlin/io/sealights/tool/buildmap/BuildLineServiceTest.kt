@@ -1,4 +1,4 @@
-package io.sealights.tool.build
+package io.sealights.tool.buildmap
 
 import io.kotest.core.spec.style.ShouldSpec
 import io.mockk.every

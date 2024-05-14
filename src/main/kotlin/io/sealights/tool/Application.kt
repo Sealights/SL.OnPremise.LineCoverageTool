@@ -3,10 +3,11 @@ package io.sealights.tool
 import arrow.core.flatMap
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.mainBody
-import io.sealights.tool.build.BuildLineService
-import io.sealights.tool.build.BuildLinesClient
+import io.sealights.tool.buildmap.BuildLineService
+import io.sealights.tool.buildmap.BuildLinesClient
 import io.sealights.tool.configuration.ApplicationArgParser
 import io.sealights.tool.configuration.Configuration
+import io.sealights.tool.configuration.TokenResolver
 import io.sealights.tool.footprints.CoverageClient
 import io.sealights.tool.footprints.FootprintsService
 import io.sealights.tool.source.GitDiffProviderService
@@ -17,20 +18,26 @@ import io.sealights.tool.source.SourceCodeLineReader
 fun main(args: Array<String>) = mainBody {
     println("Sealights Line Level Coverage details")
 
+    val tokenResolver = TokenResolver()
+    
     ArgParser(args).parseInto(::ApplicationArgParser)
         .run {
             println("Token: $token")
-            Configuration.build(this)
+            Configuration.build(this, tokenResolver)
         }
 
     println(Configuration.workspace)
 
+    val httpClient = HttpClient.build()
+
     val gitDiffProviderService = GitDiffProviderService()
     val gitModifiedLineService = GitModifiedLineService(gitDiffProviderService)
-    val buildLineService = BuildLineService(BuildLinesClient())
+    val buildLineService = BuildLineService(BuildLinesClient(httpClient))
     val footprintsService = FootprintsService(CoverageClient())
     val excelReportFormatter = ExcelReportFormatter("lineCoverageReport", "Application Name / Develop / Build 4.12.14")
     val sourceCodeLine = SourceCodeLineReader()
+    
+    
     
     val coverageTool = CoverageTool(
         gitModifiedLineService,

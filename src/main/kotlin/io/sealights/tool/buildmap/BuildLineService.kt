@@ -1,4 +1,4 @@
-package io.sealights.tool.build
+package io.sealights.tool.buildmap
 
 import arrow.core.Either
 import io.sealights.tool.FileName

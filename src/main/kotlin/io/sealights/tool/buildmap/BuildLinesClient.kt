@@ -1,12 +1,19 @@
-package io.sealights.tool.build
+package io.sealights.tool.buildmap
 
 import io.sealights.tool.FileName
+import io.sealights.tool.HttpClient
 import io.sealights.tool.MethodName
 import io.sealights.tool.ScannedMethod
 
-class BuildLinesClient {
-
+class BuildLinesClient(private val httpClient: HttpClient) {
+    
     fun getMethodsForFiles(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
+        httpClient.get("url", mapOf())
+        
+        return mapOf("asd" to listOf())
+    }
+    
+    fun getMethodsForFiles2(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
         return mapOf(
             "src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java" to listOf(
                 ScannedMethod(
