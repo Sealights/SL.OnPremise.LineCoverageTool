@@ -9,9 +9,12 @@ import io.sealights.tool.ScannedMethod
 import mu.KotlinLogging
 
 class BuildLinesClient(private val httpClient: HttpClient) {
-    
+
     fun getMethodsForFiles(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
-        val buildMap = httpClient.get("tia/apps/appName/test-stages/testStage/build-range", mapOf())
+        val buildMap = httpClient.get(
+            url = "tia/apps/appName/test-stages/testStage/build-range",
+            queryParams = mapOf()
+        )
 
         return buildMap.map(::processResponse)
             .mapLeft(ApplicationProcess::handleExit)
@@ -143,6 +146,7 @@ class BuildLinesClient(private val httpClient: HttpClient) {
             )
         )
     }
+
     companion object {
         private val log = KotlinLogging.logger {}
     }

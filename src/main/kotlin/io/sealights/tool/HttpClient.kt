@@ -8,6 +8,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class HttpClient(
     private val okHttpClient: OkHttpClient,
@@ -44,11 +46,20 @@ class HttpClient(
     }
 
     private fun prepareRequestBuilder(url: String, queryParams: Map<String, String>, customHeaders: Map<String, String>): Request.Builder {
+        val queryParametersString = prepareQueryParameters(queryParams)
         val requestBuilder = Request.Builder()
-            .url("$apiUrl/$url")
+            .url("$apiUrl/$url$queryParametersString")
+        
         addSealightsHeaders(requestBuilder)
         addCustomHeaders(requestBuilder, customHeaders)
         return requestBuilder
+    }
+
+    private fun prepareQueryParameters(queryParams: Map<String, String>): String {
+        val queryString = queryParams.entries.joinToString(separator = "&") {
+            "${it.key}=${URLEncoder.encode(it.value, StandardCharsets.UTF_8.toString())}"  
+        }
+        return if (queryString.isNotEmpty()) "?$queryString" else ""
     }
 
     private fun postProcessResponse(request: Request, response: Response): Either<String, String> {
