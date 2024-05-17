@@ -1,2 +1,8 @@
 GET https://dev-java3-gw.dev.sealights.co/api/tia/apps/appName/test-stages/testStage/build-range
-Authorization:  {{$auth.token("")}}
+Authorization:  {{$er}}
+
+###
+#GET {{host}}/sl-api/v3/slim-builds
+GET {{host}}/api/v4/builds
+Accept: application/json
+Authorization: Bearer {{tokenB}}
