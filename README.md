@@ -8,6 +8,10 @@
 
 ## Execution options
 
+### Basics
+
+
+
 ### Formatting
 
 * `sl.style.font` - font family of the report (default: _Calibri_)

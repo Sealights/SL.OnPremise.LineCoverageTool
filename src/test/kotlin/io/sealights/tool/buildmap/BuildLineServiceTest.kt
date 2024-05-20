@@ -34,6 +34,9 @@ class BuildLineServiceTest : ShouldSpec({
         // and then, methodDisplay names nad uniqueIds are correct
         assertValidUniqueIdAndDisplayNames(actualMergedMethodNames)
 
+        // and then, verify lines modification
+        assertLinesModification(actualMergedMethodNames)
+
     }
 }) {
     companion object {
@@ -154,6 +157,111 @@ class BuildLineServiceTest : ShouldSpec({
     }
 }
 
+private fun assertLinesModification(actualMergedMethodNames: Map<FileName, List<MethodLines>>) {
+
+    var uniqueMethodId = "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.newlyAddedMethod[I, I] | (II)Ljava/lang/String; | null"
+    assertEquals(
+        mapOf(
+            35 to false,
+            36 to false,
+            37 to true,
+            38 to true,
+            39 to true,
+            40 to false
+        ),
+        actualMergedMethodNames["src/main/java/dev/futa/skipping/Aaaa05.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+    uniqueMethodId = "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method003[I] | (I)Ljava/lang/String; | null"
+    assertEquals(
+        mapOf(
+            18 to false,
+            19 to false,
+            20 to true,
+            21 to true,
+            22 to true,
+            23 to true,
+            24 to false,
+        ),
+        actualMergedMethodNames["src/main/java/dev/futa/skipping/Aaaa05.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+    uniqueMethodId = "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method005[I] | (I)Ljava/lang/String; | null"
+    assertEquals(
+        mapOf(
+            28 to true,
+            29 to true,
+            30 to true
+        ),
+        actualMergedMethodNames["src/main/java/dev/futa/skipping/Aaaa05.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+    // file: src/main/java/dev/futa/skipping/Bbbb05.java
+
+    uniqueMethodId =
+        "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.modifiedLongSignatureMethod[I, Ljava/lang/String;, Ljava/util/Set;] | (ILjava/lang/String;Ljava/util/Set;)Ljava/lang/String; | null"
+    assertEquals(
+        mapOf(
+            37 to true, 38 to true, 39 to true, 40 to true, 41 to true, 42 to true
+        ),
+        actualMergedMethodNames["src/main/java/dev/futa/skipping/Bbbb05.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+    // file: "src/main/java/dev/futa/exec/NewUtil.java"
+
+    uniqueMethodId = "9 | public static Z dev.futa.exec.NewUtil.alwaysTrue[] | ()Z | null"
+    assertEquals(
+        mapOf(5 to true),
+        actualMergedMethodNames["src/main/java/dev/futa/exec/NewUtil.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+    uniqueMethodId = "1 | public V dev.futa.exec.NewUtil.<init>[] | ()V | null"
+    assertEquals(
+        mapOf(3 to true),
+        actualMergedMethodNames["src/main/java/dev/futa/exec/NewUtil.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+    // file: "src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java"
+
+    uniqueMethodId = "1 | public V dev.futa.exec.NewReplicaMainJavaExecClass.<init>[] | ()V | null"
+    assertEquals(
+        mapOf(3 to true),
+        actualMergedMethodNames["src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+    uniqueMethodId = "9 | public static V dev.futa.exec.NewReplicaMainJavaExecClass.main[[Ljava/lang/String;] | ([Ljava/lang/String;)V | null"
+    assertEquals(
+        mapOf(5 to true, 6 to true, 7 to true, 8 to true, 9 to true),
+        actualMergedMethodNames["src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+    uniqueMethodId = "9 | public static V dev.futa.exec.NewReplicaMainJavaExecClass.main2[[Ljava/lang/String;] | ([Ljava/lang/String;)V | null"
+    assertEquals(
+        mapOf(12 to true, 13 to true),
+        actualMergedMethodNames["src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+    uniqueMethodId = "9 | public static V dev.futa.exec.NewReplicaMainJavaExecClass.main3[[Ljava/lang/String;] | ([Ljava/lang/String;)V | null"
+    assertEquals(
+        mapOf(16 to true, 17 to true),
+        actualMergedMethodNames["src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java"]?.extractLineModification(uniqueMethodId),
+        "Invalid method line modification mapping for '$uniqueMethodId'"
+    )
+
+}
+
+private fun List<MethodLines>.extractLineModification(uniqueId: String) =
+    this.filter { it.name.uniqueId == uniqueId }.flatMap { it.lines }.associate { Pair(it.number, it.modified) }
+
 private fun assertValidUniqueIdAndDisplayNames(actualMergedMethodNames: Map<FileName, List<MethodLines>>) {
     assertEquals(
         setOf(
@@ -224,23 +332,23 @@ private fun List<MethodLines>.extractMethodNames(): Set<MethodName> = this.map {
 
 private fun prepareGitBasedModifiedLines(): Map<FileName, MutableList<Line>> {
 
-    val Aaaa05JavaLines = createModifiedLinesArray(20, 21, 22, 23, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39)
-    val Bbbb05JavaLines = createModifiedLinesArray(3, 4, 5, 6, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42)
-    val NewUtilJavaLines = createModifiedLinesArray(1, 2, 3, 4, 5, 6, 7)
-    val NewReplicaMainJavaExecClassJavaLines = createModifiedLinesArray(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)
+    val aaaa05JavaLines = createModifiedLinesArray(20, 21, 22, 23, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39)
+    val bbbb05JavaLines = createModifiedLinesArray(3, 4, 5, 6, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42)
+    val newUtilJavaLines = createModifiedLinesArray(1, 2, 3, 4, 5, 6, 7)
+    val newReplicaMainJavaExecClassJavaLines = createModifiedLinesArray(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18)
 
     return mapOf(
         "src/main/java/dev/futa/skipping/Aaaa05.java" to mutableListOf(
-            *Aaaa05JavaLines
+            *aaaa05JavaLines
         ),
         "src/main/java/dev/futa/skipping/Bbbb05.java" to mutableListOf(
-            *Bbbb05JavaLines
+            *bbbb05JavaLines
         ),
         "src/main/java/dev/futa/exec/NewUtil.java" to mutableListOf(
-            *NewUtilJavaLines
+            *newUtilJavaLines
         ),
         "src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java" to mutableListOf(
-            *NewReplicaMainJavaExecClassJavaLines
+            *newReplicaMainJavaExecClassJavaLines
         )
     )
 }
