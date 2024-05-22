@@ -10,9 +10,10 @@ import mu.KotlinLogging
 
 class BuildLinesClient(private val httpClient: HttpClient) {
 
-    fun getMethodsForFiles(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
-        val buildMap = httpClient.get(
+    fun getMethodsForFiles2(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
+        val buildMap = httpClient.post(
             url = "tia/apps/appName/test-stages/testStage/build-range",
+            payload = "[]",
             queryParams = mapOf()
         )
 
@@ -26,7 +27,7 @@ class BuildLinesClient(private val httpClient: HttpClient) {
         return getMethodsForFiles2(setOf())
     }
 
-    fun getMethodsForFiles2(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
+    fun getMethodsForFiles(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
         return mapOf(
             "src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java" to listOf(
                 ScannedMethod(

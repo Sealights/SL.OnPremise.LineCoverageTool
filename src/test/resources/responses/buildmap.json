@@ -1,0 +1,166 @@
+[
+  {
+    "file": "src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java",
+    "methods": [
+      {
+        "name": {
+          "codeElementId": "1 | public V dev.futa.exec.NewReplicaMainJavaExecClass.\u003cinit\u003e[] | ()V | null",
+          "displayName": "public NewReplicaMainJavaExecClass()"
+        },
+        "start": 3,
+        "end": 3
+      },
+      {
+        "name": {
+          "codeElementId": "9 | public static V dev.futa.exec.NewReplicaMainJavaExecClass.main[[Ljava/lang/String;] | ([Ljava/lang/String;)V | null",
+          "displayName": "public static void main(String[])"
+        },
+        "start": 5,
+        "end": 9
+      },
+      {
+        "name": {
+          "codeElementId": "9 | public static V dev.futa.exec.NewReplicaMainJavaExecClass.main2[[Ljava/lang/String;] | ([Ljava/lang/String;)V | null",
+          "displayName": "public static void main2(String[])"
+        },
+        "start": 12,
+        "end": 13
+      },
+      {
+        "name": {
+          "codeElementId": "9 | public static V dev.futa.exec.NewReplicaMainJavaExecClass.main3[[Ljava/lang/String;] | ([Ljava/lang/String;)V | null",
+          "displayName": "public static void main3(String[])"
+        },
+        "start": 16,
+        "end": 17
+      }
+    ]
+  },
+  {
+    "file": "src/main/java/dev/futa/exec/NewUtil.java",
+    "methods": [
+      {
+        "name": {
+          "codeElementId": "9 | public static Z dev.futa.exec.NewUtil.alwaysTrue[] | ()Z | null",
+          "displayName": "public static boolean alwaysTrue()"
+        },
+        "start": 5,
+        "end": 5
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public V dev.futa.exec.NewUtil.\u003cinit\u003e[] | ()V | null",
+          "displayName": "public NewUtil()"
+        },
+        "start": 3,
+        "end": 3
+      }
+    ]
+  },
+  {
+    "file": "src/main/java/dev/futa/skipping/Aaaa05.java",
+    "methods": [
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.newlyAddedMethod[I, I] | (II)Ljava/lang/String; | null",
+          "displayName": "public String newlyAddedMethod(int, int)"
+        },
+        "start": 35,
+        "end": 40
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method003[I] | (I)Ljava/lang/String; | null",
+          "displayName": "public String method003(int)"
+        },
+        "start": 18,
+        "end": 24
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method005[I] | (I)Ljava/lang/String; | null",
+          "displayName": "public String method005(int)"
+        },
+        "start": 28,
+        "end": 30
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method002[I] | (I)Ljava/lang/String; | null",
+          "displayName": "public String method002(int)"
+        },
+        "start": 12,
+        "end": 14
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method001[I] | (I)Ljava/lang/String; | null",
+          "displayName": "public String method001(int)"
+        },
+        "start": 6,
+        "end": 8
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public V dev.futa.skipping.Aaaa05.\u003cinit\u003e[] | ()V | null",
+          "displayName": "public Aaaa05()"
+        },
+        "start": 3,
+        "end": 3
+      }
+    ]
+  },
+  {
+    "file": "src/main/java/dev/futa/skipping/Bbbb05.java",
+    "methods": [
+      {
+        "name": {
+          "codeElementId": "1 | public V dev.futa.skipping.Bbbb05.\u003cinit\u003e[] | ()V | null",
+          "displayName": "public Bbbb05()"
+        },
+        "start": 7,
+        "end": 7
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.modifiedLongSignatureMethod[I, Ljava/lang/String;, Ljava/util/Set;] | (ILjava/lang/String;Ljava/util/Set;)Ljava/lang/String; | null",
+          "displayName": "public String modifiedLongSignatureMethod(int, String, Set)"
+        },
+        "start": 37,
+        "end": 42
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.method003[I] | (I)Ljava/lang/String; | null",
+          "displayName": "public String method003(int)"
+        },
+        "start": 22,
+        "end": 24
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.method004[I] | (I)Ljava/lang/String; | null",
+          "displayName": "public String method004(int)"
+        },
+        "start": 28,
+        "end": 30
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.method002[I] | (I)Ljava/lang/String; | null",
+          "displayName": "public String method002(int)"
+        },
+        "start": 16,
+        "end": 18
+      },
+      {
+        "name": {
+          "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.method001[I] | (I)Ljava/lang/String; | null",
+          "displayName": "public String method001(int)"
+        },
+        "start": 10,
+        "end": 12
+      }
+    ]
+  }
+]
