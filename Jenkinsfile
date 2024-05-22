@@ -21,7 +21,7 @@ properties([
                 string(name: 'Infra_Version', defaultValue: '', description: 'infra version')
         ])
 ])
-LineLevelCoverageToolBuilder([
+LineLevelCoverageTool([
         github_repo_name          :     'SL.OnPremise.LineCoverageTool',
         base_image_uri            :     '534369319675.dkr.ecr.us-west-2.amazonaws.com/sl-jenkins-java-agent:latest',
         ecr_uri                   :     '534369319675.dkr.ecr.us-west-2.amazonaws.com',
