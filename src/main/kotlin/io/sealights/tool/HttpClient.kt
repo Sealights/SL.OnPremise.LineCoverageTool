@@ -65,7 +65,7 @@ class HttpClient(
     private fun postProcessResponse(request: Request, response: Response): Either<String, String> {
         return if (response.isSuccessful) {
             log.debug { "Successfully get data from `${request.url}`." }
-            Either.Right(response.body.toString())
+            Either.Right(response.body?.string().orEmpty())
         } else {
             log.warn { "Error getting remote data from `${request.url}`. Status code: `${response.code}` and body `${response.body?.string()}`" }
             Either.Left("Service `${request.url}` responded with status `${response.code}`")

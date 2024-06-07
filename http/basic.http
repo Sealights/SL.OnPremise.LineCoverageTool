@@ -6,3 +6,13 @@ Authorization:  {{$er}}
 GET {{host}}/api/v4/builds
 Accept: application/json
 Authorization: Bearer {{tokenB}}
+
+###
+POST http://host.docker.internal:8080/api/v5/agents/builds/asd
+#Accept: application/json
+Authorization: Bearer {{tokenB}}
+
+###
+GET http://host.docker.internal:8080/
+#Accept: application/json
+Authorization: Bearer {{tokenB}}

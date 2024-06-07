@@ -1,0 +1,36 @@
+[
+  {
+    "file": "src/main/java/Service001.java",
+    "methods": [
+      {
+        "uniqueId": "1 | public Ljava/lang/String; Service001.saveSomething[] | ()Ljava/lang/String; | null",
+        "displayName": "public java/lang/String Service001.saveSomething(java/lang/String)",
+        "start": 8,
+        "end": 12
+      },
+      {
+        "uniqueId": "1 | public Ljava/lang/String; Service001.deleteSomething[] | ()Ljava/lang/String; | null",
+        "displayName": "public java/lang/String Service001.deleteSomething(java/lang/String)",
+        "start": 16,
+        "end": 19
+      }
+    ]
+  },
+  {
+    "file": "src/main/java/Repository001.java",
+    "methods": [
+      {
+        "uniqueId": "1 | public Ljava/lang/String; Repository001.saveSomething[] | ()Ljava/lang/String; | null",
+        "displayName": "public java/lang/String Repository001.saveSomething(java/lang/String)",
+        "start": 18,
+        "end": 22
+      },
+      {
+        "uniqueId": "1 | public Ljava/lang/String; Repository001.deleteSomething[] | ()Ljava/lang/String; | null",
+        "displayName": "public java/lang/String Repository001.deleteSomething(java/lang/String)",
+        "start": 26,
+        "end": 29
+      }
+    ]
+  }
+]

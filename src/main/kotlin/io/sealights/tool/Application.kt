@@ -19,12 +19,12 @@ fun main(args: Array<String>) = mainBody {
     println("Sealights Line Level Coverage details")
 
     val tokenResolver = TokenResolver()
-    
+
     ArgParser(args).parseInto(::ApplicationArgParser)
         .run {
             Configuration.build(this, tokenResolver)
             Configuration.printConfiguration()
-            
+
         }
 
     println(Configuration.workspace)
@@ -37,9 +37,8 @@ fun main(args: Array<String>) = mainBody {
     val footprintsService = FootprintsService(CoverageClient())
     val excelReportFormatter = ExcelReportFormatter("lineCoverageReport", "${Configuration.baseApp} / ${Configuration.baseBranch} / ${Configuration.baseBuild}")
     val sourceCodeLine = SourceCodeLineReader()
-    
-    
-    
+
+
     val coverageTool = CoverageTool(
         gitModifiedLineService,
         buildLineService,
@@ -62,7 +61,14 @@ class CoverageTool(
 ) {
     fun run() {
         gitLinesService.modifiedFileLines(Configuration.workspace, Configuration.baseCommit, "HEAD")
-            .flatMap { buildLineService.mergeMethodNames(it) }
+            .flatMap {
+                buildLineService.mergeMethodNames(
+                    gitModifiedLines = it,
+                    appName = Configuration.currentApp,
+                    branchName = Configuration.currentBranch,
+                    buildName = Configuration.currentBuild
+                )
+            }
             .flatMap { sourceCodeLine.attacheLineContent(it) }
             .flatMap { footprintsService.appendLineExecutionData(it) }
             .flatMap { excelReportFormatter.createReport(it) }

@@ -24,6 +24,18 @@ class ApplicationArgParser(argParser: ArgParser) {
         "--baseBuild",
         help = "comparison base build name"
     )
+    val currentApp by argParser.storing(
+        "--currentApp",
+        help = "current application name"
+    )
+    val currentBranch by argParser.storing(
+        "--currentBranch",
+        help = "current branch name"
+    )
+    val currentBuild by argParser.storing(
+        "--currentBuild",
+        help = "current build name"
+    )
     val baseCommit by argParser.storing(
         "--baseCommit",
         help = "start commit has"

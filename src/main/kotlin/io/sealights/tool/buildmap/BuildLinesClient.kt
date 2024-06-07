@@ -1,6 +1,10 @@
 package io.sealights.tool.buildmap
 
+import arrow.core.Either
+import arrow.core.flatMap
 import arrow.core.getOrElse
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.sealights.tool.ApplicationProcess
 import io.sealights.tool.FileName
 import io.sealights.tool.HttpClient
@@ -10,24 +14,38 @@ import mu.KotlinLogging
 
 class BuildLinesClient(private val httpClient: HttpClient) {
 
-    fun getMethodsForFiles2(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
+    fun getMethodsForFiles(physicalPaths: Set<String>, appName: String, branchName: String, buildName: String): Map<FileName, List<ScannedMethod>> {
         val buildMap = httpClient.post(
-            url = "tia/apps/appName/test-stages/testStage/build-range",
+            url = "v5/agents/builds/$appName/$branchName/$buildName/queryModifiedMethods",
             payload = "[]",
             queryParams = mapOf()
         )
 
-        return buildMap.map(::processResponse)
+        return buildMap.flatMap { convertResponse(it) }
+            .flatMap { transformToDomainModel(it) }
             .mapLeft(ApplicationProcess::handleExit)
             .getOrElse { mapOf() }
     }
 
-    private fun processResponse(buildMapResponse: String): Map<FileName, List<ScannedMethod>> {
+    private fun convertResponse(buildMapResponseBody: String): Either<String, List<BuildMapElement>> {
         log.info { "processing build map response" }
-        return getMethodsForFiles2(setOf())
+        log.debug { "Data fetched: $buildMapResponseBody" }
+
+        val type = object : TypeToken<List<BuildMapElement>>() {}.type
+        val mappedResponse = Gson().fromJson<List<BuildMapElement>>(buildMapResponseBody, type)
+
+        return Either.Right(mappedResponse)
     }
 
-    fun getMethodsForFiles(physicalPaths: Set<String>): Map<FileName, List<ScannedMethod>> {
+    private fun transformToDomainModel(unmarshalledJson: List<BuildMapElement>): Either<String, Map<FileName, List<ScannedMethod>>> {
+        val mapValues = unmarshalledJson.groupBy { it.file }
+            .mapValues { entry -> entry.value.map { buildMapElement -> buildMapElement.toScannedMethod() } }
+            .mapValues { entry -> entry.value.flatten() }
+
+        return Either.Right(mapValues)
+    }
+
+    fun getMethodsForFiles2(physicalPaths: Set<String>, appName: String, branchName: String, buildName: String): Map<FileName, List<ScannedMethod>> {
         return mapOf(
             "src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java" to listOf(
                 ScannedMethod(
@@ -151,4 +169,25 @@ class BuildLinesClient(private val httpClient: HttpClient) {
     companion object {
         private val log = KotlinLogging.logger {}
     }
+}
+
+private fun BuildMapElement.toScannedMethod() = methods.map {
+    ScannedMethod(
+        MethodName(uniqueId = it.uniqueId, displayName = it.displayName),
+        start = 0,
+        end = 0
+    )
+}
+
+
+private data class BuildMapElement(
+    val file: String,
+    val methods: List<Method>
+) {
+    data class Method(
+        val uniqueId: String,
+        val displayName: String,
+        val start: Int,
+        val end: Int
+    )
 }
