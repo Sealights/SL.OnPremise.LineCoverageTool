@@ -34,7 +34,7 @@ fun main(args: Array<String>) = mainBody {
     val gitDiffProviderService = GitDiffProviderService()
     val gitModifiedLineService = GitModifiedLineService(gitDiffProviderService)
     val buildLineService = BuildLineService(BuildLinesClient(httpClient))
-    val footprintsService = FootprintsService(CoverageClient())
+    val footprintsService = FootprintsService(CoverageClient(httpClient))
     val excelReportFormatter = ExcelReportFormatter("lineCoverageReport", "${Configuration.baseApp} / ${Configuration.baseBranch} / ${Configuration.baseBuild}")
     val sourceCodeLine = SourceCodeLineReader()
 

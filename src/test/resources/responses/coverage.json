@@ -1,28 +1,23 @@
 [
   {
     "codeElementId": "9 | public static Z dev.futa.exec.NewUtil.alwaysTrue[] | ()Z | null",
-    "lineHits": []
+    "lineHits": [5]
   },
   {
-    "codeElementId": "1 | public V dev.futa.exec.NewUtil.\u003cinit\u003e[] | ()V | null",
-    "lineHits": []
+    "codeElementId": "1 | public V dev.futa.exec.NewUtil.<init>[] | ()V | null",
+    "lineHits": [3]
   },
   {
     "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.newlyAddedMethod[I, I] | (II)Ljava/lang/String; | null",
-    "lineHits": []
+    "lineHits": [36]
   },
   {
     "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method003[I] | (I)Ljava/lang/String; | null",
-    "lineHits": [
-      22,
-      24
-    ]
+    "lineHits": [35, 36, 37, 40]
   },
   {
     "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method005[I] | (I)Ljava/lang/String; | null",
-    "lineHits": [
-      29
-    ]
+    "lineHits": []
   },
   {
     "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method002[I] | (I)Ljava/lang/String; | null",
@@ -30,9 +25,7 @@
   },
   {
     "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Aaaa05.method001[I] | (I)Ljava/lang/String; | null",
-    "lineHits": [
-      6
-    ]
+    "lineHits": []
   },
   {
     "codeElementId": "1 | public V dev.futa.skipping.Aaaa05.\u003cinit\u003e[] | ()V | null",
@@ -44,15 +37,11 @@
   },
   {
     "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.modifiedLongSignatureMethod[I, Ljava/lang/String;, Ljava/util/Set;] | (ILjava/lang/String;Ljava/util/Set;)Ljava/lang/String; | null",
-    "lineHits": [
-      37
-    ]
+    "lineHits": []
   },
   {
     "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.method003[I] | (I)Ljava/lang/String; | null",
-    "lineHits": [
-      23
-    ]
+    "lineHits": []
   },
   {
     "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.method004[I] | (I)Ljava/lang/String; | null",
@@ -64,8 +53,6 @@
   },
   {
     "codeElementId": "1 | public Ljava/lang/String; dev.futa.skipping.Bbbb05.method001[I] | (I)Ljava/lang/String; | null",
-    "lineHits": [
-      10
-    ]
+    "lineHits": []
   }
 ]

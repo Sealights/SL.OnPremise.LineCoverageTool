@@ -14,7 +14,7 @@ class FootprintsService(
     private val coverageClient: CoverageClient
 ) {
     fun appendLineExecutionData(methodLinesMap: Map<FileName, List<MethodLines>>): Either<Error, Map<FileName, Set<MethodLinesWithCoverage>>> {
-        val methodLineCoverage = coverageClient.fetchCoverage("appName", "branch", "buildName", methodLinesMap.keys.toSet())
+        val methodLineCoverage = coverageClient.fetchCoverage(appName = "appName", branchName = "branch", buildName = "buildName", physicalPaths = methodLinesMap.keys.toList())
 
         return Either.Right(methodLinesMap.mapValues { methodLines ->
             methodLines.value.map { methodLine ->
@@ -26,7 +26,7 @@ class FootprintsService(
         })
     }
 
-    private fun lineToLineWithCoverage(methodLineCoverage: Map<UniqueMethodId, Set<Int>>, uniqueId: String, lines: MutableList<Line>): List<LineWithCoverage> {
+    private fun lineToLineWithCoverage(methodLineCoverage: Map<UniqueMethodId, List<Int>>, uniqueId: String, lines: MutableList<Line>): List<LineWithCoverage> {
         return lines.map { line ->
             run {
                 val covered = methodLineCoverage[uniqueId]?.contains(line.number) ?: false

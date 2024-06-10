@@ -42,7 +42,7 @@ class HttpClient(
         postProcessResponse(request, response)
     } catch (e: RuntimeException) {
         log.error { "Could not fetch data from $url. The reason is: `${e.message}` " }
-        Either.Left("Could not GET the data due to `${e.message}`")
+        Either.Left("Could not $method the data due to `${e.message}`.\nEndpoint is: $url")
     }
 
     private fun prepareRequestBuilder(url: String, queryParams: Map<String, String>, customHeaders: Map<String, String>): Request.Builder {

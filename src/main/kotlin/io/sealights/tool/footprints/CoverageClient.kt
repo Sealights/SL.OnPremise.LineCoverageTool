@@ -1,11 +1,50 @@
 package io.sealights.tool.footprints
 
+import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.getOrElse
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import io.sealights.tool.ApplicationProcess
 import io.sealights.tool.FileName
+import io.sealights.tool.HttpClient
 import io.sealights.tool.UniqueMethodId
+import mu.KotlinLogging
 import kotlin.random.Random
 
-class CoverageClient {
-    fun fetchCoverage(appName: String, branchName: String, buildName: String, physicalPaths: Set<FileName>): Map<UniqueMethodId, Set<Int>> {
+class CoverageClient(private val httpClient: HttpClient) {
+
+    fun fetchCoverage(appName: String, branchName: String, buildName: String, physicalPaths: List<FileName>): Map<UniqueMethodId, List<Int>> {
+        val buildMap = httpClient.post(
+            url = "v5/agents/footprints/$appName/$branchName/$buildName/queryLineHits",
+            payload = physicalPaths.joinToString(",", "[", "]") { file -> "\"$file\"" },
+            queryParams = mapOf()
+        )
+
+        return buildMap.flatMap { unmarshallResponse(it) }
+            .flatMap { transformToDomainModel(it) }
+            .mapLeft(ApplicationProcess::handleExit)
+            .getOrElse { mapOf() }
+    }
+
+    private fun transformToDomainModel(codeElementLineHitsList: List<MethodElementLineHits>) = Either.Right(
+        codeElementLineHitsList.groupBy { it.codeElementId }
+            .mapValues { entry -> entry.value.map { it.lineHits } }
+            .mapValues { entry -> entry.value.flatten().sorted() }
+    )
+
+
+    private fun unmarshallResponse(responseBody: String): Either<String, List<MethodElementLineHits>> {
+        log.info { "processing line hits response" }
+        log.debug { "Data fetched: $responseBody" }
+
+        val type = object : TypeToken<List<MethodElementLineHits>>() {}.type
+        val mappedResponse = Gson().fromJson<List<MethodElementLineHits>>(responseBody, type)
+
+        return Either.Right(mappedResponse)
+    }
+
+    fun fetchCoverage2(appName: String, branchName: String, buildName: String, physicalPaths: List<FileName>): Map<UniqueMethodId, Set<Int>> {
         return mapOf(
             "9 | public static Z dev.futa.exec.NewUtil.alwaysTrue[] | ()Z | null" to randomNumbersFromRange(5, 5),
             "1 | public V dev.futa.exec.NewUtil.<init>[] | ()V | null" to randomNumbersFromRange(3, 3),
@@ -33,4 +72,13 @@ class CoverageClient {
             .filter { Random.nextDouble(0.0, 1.0) > 0.80 }
             .toSet()
     }
+
+    companion object {
+        private val log = KotlinLogging.logger {}
+    }
 }
+
+private data class MethodElementLineHits(
+    val codeElementId: String,
+    val lineHits: List<Int>
+)

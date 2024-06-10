@@ -22,13 +22,13 @@ class BuildLinesClient(private val httpClient: HttpClient) {
             queryParams = mapOf()
         )
 
-        return buildMap.flatMap { convertResponse(it) }
+        return buildMap.flatMap { unmarshallResponse(it) }
             .flatMap { transformToDomainModel(it) }
             .mapLeft(ApplicationProcess::handleExit)
             .getOrElse { mapOf() }
     }
 
-    private fun convertResponse(buildMapResponseBody: String): Either<String, List<BuildMapElement>> {
+    private fun unmarshallResponse(buildMapResponseBody: String): Either<String, List<BuildMapElement>> {
         log.info { "processing build map response" }
         log.debug { "Data fetched: $buildMapResponseBody" }
 
