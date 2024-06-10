@@ -7,7 +7,7 @@ typealias LineList = MutableList<Line>
 typealias Errors = List<String>
 
 data class MethodName(
-    val uniqueId: String,
+    val codeElementId: String,
     val displayName: String
 )
 

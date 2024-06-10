@@ -20,7 +20,7 @@ class FootprintsService(
             methodLines.value.map { methodLine ->
                 MethodLinesWithCoverage(
                     name = methodLine.name,
-                    linesCoverage = lineToLineWithCoverage(methodLineCoverage, methodLine.name.uniqueId, methodLine.lines)
+                    linesCoverage = lineToLineWithCoverage(methodLineCoverage, methodLine.name.codeElementId, methodLine.lines)
                 )
             }.toSet()
         })

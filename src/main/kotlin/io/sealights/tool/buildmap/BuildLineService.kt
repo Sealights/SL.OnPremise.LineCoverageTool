@@ -11,7 +11,7 @@ class BuildLineService(
     private val buildLinesClient: BuildLinesClient
 ) {
     fun mergeMethodNames(gitModifiedLines: Map<FileName, LineList>, appName: String, branchName: String, buildName: String): Either<Error, Map<FileName, List<MethodLines>>> {
-        val sourceFile2MethodsMapping = buildLinesClient.getMethodsForFiles(gitModifiedLines.keys, appName, branchName, buildName)
+        val sourceFile2MethodsMapping = buildLinesClient.getMethodsForFiles(gitModifiedLines.keys.toList(), appName, branchName, buildName)
 
         val mapped = gitModifiedLines
             .filterKeys { fileName ->
