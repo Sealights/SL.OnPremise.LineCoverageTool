@@ -94,5 +94,5 @@ class GitModifiedLineServiceTest : ShouldSpec({
     }
 }
 
-private fun List<Line>.extractLineNumbers(): List<Int>? = this?.map { line -> line.number }
+private fun List<Line>.extractLineNumbers(): List<Int> = this.map { line -> line.number }
 

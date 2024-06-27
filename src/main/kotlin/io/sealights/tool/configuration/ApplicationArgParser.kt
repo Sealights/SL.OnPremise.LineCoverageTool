@@ -12,34 +12,26 @@ class ApplicationArgParser(argParser: ArgParser) {
         "-w", "--workspace",
         help = "workspace"
     ).default(".")
-    val baseApp by argParser.storing(
-        "--baseApp",
-        help = "comparison base application name"
+    val buildSessionId by argParser.storing(
+        "--buildSessionId",
+        help = "current buildSessionId"
     )
-    val baseBranch by argParser.storing(
-        "--baseBranch",
-        help = "comparison base branch name"
-    )
-    val baseBuild by argParser.storing(
-        "--baseBuild",
-        help = "comparison base build name"
-    )
-    val currentApp by argParser.storing(
-        "--currentApp",
-        help = "current application name"
-    )
-    val currentBranch by argParser.storing(
-        "--currentBranch",
-        help = "current branch name"
-    )
-    val currentBuild by argParser.storing(
-        "--currentBuild",
-        help = "current build name"
-    )
-    val baseCommit by argParser.storing(
-        "--baseCommit",
-        help = "start commit has"
-    )
+    val referenceBuildSessionId by argParser.storing(
+        "--referenceBuildSessionId",
+        help = "base build session id to compare"
+    ).default("")
+    val integrationReferenceBuildSessionId by argParser.storing(
+        "--integrationReferenceBuildSessionId",
+        help = "integrationReferenceBuildSessionId value"
+    ).default("")
+    val integrationBuildSessionId by argParser.storing(
+        "--integrationBuildSessionId",
+        help = "integrationBuildSessionId value"
+    ).default("")
+    val componentName by argParser.storing(
+        "--componentName",
+        help = "componentName - required id the integrationBuildSessionId is set"
+    ).default("")
 
 //    fun set(token: String, startCommit: String, endCommit: String = "HEAD", workspace: String = ".") {
 //        Configuration.token = token

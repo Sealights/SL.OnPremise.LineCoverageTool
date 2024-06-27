@@ -1,0 +1,37 @@
+{
+  "data": {
+    "appName": "integration-line-coverage-2",
+    "build": {
+      "bsid": "c36cbcd2-19de-4dac-84c6-e04846cc1ffd",
+      "name": "Sun, 09 Jun 2024 07:26:58 GMT",
+      "generated": "2024-06-09T07:26:58.835Z",
+      "isIntegration": true
+    },
+    "branchName": "line-coverage-2",
+    "refBuild": {
+      "name": "Thu, 06 Jun 2024 07:39:10 GMT",
+      "generated": "2024-06-06T07:39:10.974Z",
+      "branchName": "line-coverage-2",
+      "buildsAgo": 1,
+      "isPinned": false
+    },
+    "buildScanStatus": "Completed",
+    "buildFailureMessage": null,
+    "buildDuration": null,
+    "isReference": false,
+    "isPr": false,
+    "components": [
+      {
+        "appName": "sealightservice",
+        "branchName": "line-coverage-2",
+        "buildName": "1-0-31",
+        "status": "modified",
+        "refBuild": "1-0-30",
+        "isFilteredOut": false
+      }
+    ],
+    "status": "ended",
+    "technology": "nodejs",
+    "buildMethodology": "MethodLines"
+  }
+}

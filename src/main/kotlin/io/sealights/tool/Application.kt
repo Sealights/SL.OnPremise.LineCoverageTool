@@ -3,6 +3,8 @@ package io.sealights.tool
 import arrow.core.flatMap
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.mainBody
+import io.sealights.tool.build.BuildDataClient
+import io.sealights.tool.build.BuildDataService
 import io.sealights.tool.buildmap.BuildLineService
 import io.sealights.tool.buildmap.BuildLinesClient
 import io.sealights.tool.configuration.ApplicationArgParser
@@ -24,18 +26,23 @@ fun main(args: Array<String>) = mainBody {
         .run {
             Configuration.build(this, tokenResolver)
             Configuration.printConfiguration()
-
         }
 
     println(Configuration.workspace)
 
     val httpClient = HttpClient.build()
+    
+    val buildDataService = BuildDataService(BuildDataClient(httpClient))
+    val buildData = buildDataService.fetchBuildData(Configuration.buildSessionId(), Configuration.componentName)
+    var referenceBuildSessionId = Configuration.referenceBuildSessionId().ifEmpty { buildData.referenceBuildSessionId }
+    val referenceBuildData = buildDataService.fetchBuildData(referenceBuildSessionId, Configuration.componentName)
+
 
     val gitDiffProviderService = GitDiffProviderService()
     val gitModifiedLineService = GitModifiedLineService(gitDiffProviderService)
     val buildLineService = BuildLineService(BuildLinesClient(httpClient))
     val footprintsService = FootprintsService(CoverageClient(httpClient))
-    val excelReportFormatter = ExcelReportFormatter("lineCoverageReport", "${Configuration.baseApp} / ${Configuration.baseBranch} / ${Configuration.baseBuild}")
+    val excelReportFormatter = ExcelReportFormatter("lineCoverageReport", "{Configuration.baseApp} / {Configuration.baseBranch} / {Configuration.baseBuild}")
     val sourceCodeLine = SourceCodeLineReader()
 
 
@@ -47,7 +54,7 @@ fun main(args: Array<String>) = mainBody {
         sourceCodeLine
     )
 
-    coverageTool.run()
+    coverageTool.run("referenceCommitHash")
 
     println("Sealights Line Level Coverage end.")
 }
@@ -59,14 +66,12 @@ class CoverageTool(
     private val excelReportFormatter: ExcelReportFormatter,
     private val sourceCodeLine: SourceCodeLineReader
 ) {
-    fun run() {
-        gitLinesService.modifiedFileLines(Configuration.workspace, Configuration.baseCommit, "HEAD")
+    fun run(referenceCommitHash: String) {
+        gitLinesService.modifiedFileLines(Configuration.workspace, referenceCommitHash, "HEAD")
             .flatMap {
                 buildLineService.mergeMethodNames(
                     gitModifiedLines = it,
-                    appName = Configuration.currentApp,
-                    branchName = Configuration.currentBranch,
-                    buildName = Configuration.currentBuild
+                    buildSessionId = ""
                 )
             }
             .flatMap { sourceCodeLine.attacheLineContent(it) }

@@ -19,7 +19,7 @@ class TokenResolverTest : ShouldSpec({
         // then
         val tokenData = tokenDataEither.let { it.getOrNull() }
         assertEquals("agent", tokenData?.role)
-        assertEquals("https://dev-java3-gw.dev.sealights.co/api", tokenData?.apiUrl)
+        assertEquals("https://dev-java3-gw.dev.sealights.co", tokenData?.apiUrl)
         assertEquals(VALID_TOKEN, tokenData?.token)
 
     }

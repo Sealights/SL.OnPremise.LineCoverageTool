@@ -24,7 +24,7 @@ class TokenResolver {
                 TokenData(
                     token = jwtToken,
                     role = fromJson["x-sl-role"] as String,
-                    apiUrl = fromJson["x-sl-server"] as String
+                    apiUrl = removeApiSufix(fromJson["x-sl-server"])
                 )
             )
         } catch (exception: Exception) {
@@ -32,6 +32,8 @@ class TokenResolver {
             return Either.Left("Could not extract data from provided token")
         }
     }
+
+    private fun removeApiSufix(urlToParse: Any?) = urlToParse.toString().replace("/api", "")
 
     companion object {
         private val log = KotlinLogging.logger {}

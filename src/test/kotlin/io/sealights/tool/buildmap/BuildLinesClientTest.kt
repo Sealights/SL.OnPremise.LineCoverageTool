@@ -29,12 +29,12 @@ class BuildLinesClientTest : ShouldSpec({
 
 
         // when
-        val actualMethods = buildLinesClient.getMethodsForFiles(filesInBuildMap, "appName", "branchName", "buildName")
+        val actualMethods = buildLinesClient.getMethodsForFiles(filesInBuildMap, "123-buildSessionId")
 
         // then - HTTP client is called
         verify {
             httpClientMock.post(
-                url = "v5/agents/builds/appName/branchName/buildName/queryModifiedMethods",
+                url = "v5/agents/builds/123-buildSessionId/queryModifiedMethods",
                 payload = "[\"src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java\",\"src/main/java/dev/futa/skipping/Bbbb05.java\",\"src/main/java/dev/futa/skipping/Aaaa05.java\",\"src/main/java/dev/futa/exec/NewUtil.java\"]",
                 queryParams = mapOf()
             )

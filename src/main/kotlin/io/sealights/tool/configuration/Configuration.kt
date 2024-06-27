@@ -8,38 +8,43 @@ object Configuration {
 
     var workspace: String = ""
     var token: String = ""
-    var baseCommit: String = ""
-    var baseApp: String = ""
-    var baseBranch: String = ""
-    var baseBuild: String = ""
-    var currentApp: String = ""
-    var currentBranch: String = ""
-    var currentBuild: String = ""
+    var buildSessionId: String = ""
+    var referenceBuildSessionId: String = ""
+    var integrationReferenceBuildSessionId: String = ""
+    var integrationBuildSessionId: String = ""
+    var componentName: String = ""
     lateinit var apiUrl: String
 
     fun build(parser: ApplicationArgParser, tokenResolver: TokenResolver) {
         workspace = parser.workspace
         token = parser.token
-        baseCommit = parser.baseCommit
-        baseApp = parser.baseApp
-        baseBranch = parser.baseBranch
-        baseCommit = parser.baseCommit
-        currentApp = parser.currentApp
-        currentBranch = parser.currentBranch
-        currentBuild = parser.currentBuild
+        buildSessionId = parser.buildSessionId
+        referenceBuildSessionId = parser.referenceBuildSessionId
+        integrationReferenceBuildSessionId = parser.integrationReferenceBuildSessionId
+        integrationBuildSessionId = parser.integrationBuildSessionId
+        componentName = parser.componentName
         apiUrl = tokenResolver.resolve(token).map { tokenData -> tokenData.apiUrl }.getOrElse { "" }
     }
+
+    fun buildSessionId(): String =
+        buildSessionId.ifEmpty {
+            integrationBuildSessionId
+        }
+
+    fun referenceBuildSessionId(): String =
+        referenceBuildSessionId.ifEmpty {
+            integrationReferenceBuildSessionId
+        }
+
 
     fun printConfiguration() {
         log.info { "=== CONFIGURATION DATA ===" }
         log.info { "  workspace: $workspace" }
-        log.info { "  baseCommit: $baseCommit" }
-        log.info { "  baseApp: $baseApp" }
-        log.info { "  baseBranch: $baseBranch" }
-        log.info { "  baseBuild: $baseBuild" }
-        log.info { "  currentApp: $currentApp" }
-        log.info { "  currentBranch: $currentBranch" }
-        log.info { "  currentBuild: $currentBuild" }
+        log.info { "  buildSessionId: $buildSessionId" }
+        log.info { "  referenceBuildSessionId: $referenceBuildSessionId" }
+        log.info { "  integrationReferenceBuildSessionId: $integrationReferenceBuildSessionId" }
+        log.info { "  integrationBuildSessionId: $integrationBuildSessionId" }
+        log.info { "  componentName: $componentName" }
         log.info { "  token: ${token.substring(0, 10)}..." }
         log.info { "  apiUrl: $apiUrl" }
         log.info { "=== CONFIGURATION DATA END ===" }
@@ -48,7 +53,7 @@ object Configuration {
     fun validate() {
         var shouldExit = false
 
-        if (apiUrl.isNullOrEmpty()) {
+        if (apiUrl.isEmpty()) {
             log.info { "Could not extract api URL from provided token" }
             shouldExit = true
         }

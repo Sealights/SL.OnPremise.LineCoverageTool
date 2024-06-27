@@ -10,8 +10,8 @@ import io.sealights.tool.ScannedMethod
 class BuildLineService(
     private val buildLinesClient: BuildLinesClient
 ) {
-    fun mergeMethodNames(gitModifiedLines: Map<FileName, LineList>, appName: String, branchName: String, buildName: String): Either<Error, Map<FileName, List<MethodLines>>> {
-        val sourceFile2MethodsMapping = buildLinesClient.getMethodsForFiles(gitModifiedLines.keys.toList(), appName, branchName, buildName)
+    fun mergeMethodNames(gitModifiedLines: Map<FileName, LineList>, buildSessionId: String): Either<Error, Map<FileName, List<MethodLines>>> {
+        val sourceFile2MethodsMapping = buildLinesClient.getMethodsForFiles(gitModifiedLines.keys.toList(), buildSessionId)
 
         val mapped = gitModifiedLines
             .filterKeys { fileName ->

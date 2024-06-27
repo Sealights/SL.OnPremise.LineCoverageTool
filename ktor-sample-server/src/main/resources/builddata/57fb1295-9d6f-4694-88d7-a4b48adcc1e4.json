@@ -1,0 +1,28 @@
+{
+  "data": {
+    "appName": "gradle-cache",
+    "build": {
+      "bsid": "57fb1295-9d6f-4694-88d7-a4b48adcc1e4",
+      "name": "1-9",
+      "generated": "2024-06-25T13:11:59.538Z",
+      "isIntegration": false
+    },
+    "branchName": "master",
+    "refBuild": {
+      "name": "1-8",
+      "generated": "2024-06-25T13:01:33.285Z",
+      "branchName": "master",
+      "buildsAgo": 1,
+      "isPinned": false
+    },
+    "buildScanStatus": "Completed",
+    "buildFailureMessage": null,
+    "buildDuration": 80919,
+    "isReference": false,
+    "isPr": false,
+    "components": [],
+    "status": "ended",
+    "technology": "java",
+    "buildMethodology": "Methods"
+  }
+}

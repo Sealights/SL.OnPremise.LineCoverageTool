@@ -14,10 +14,10 @@ import mu.KotlinLogging
 
 class BuildLinesClient(private val httpClient: HttpClient) {
 
-    fun getMethodsForFiles(physicalPaths: List<String>, appName: String, branchName: String, buildName: String): Map<FileName, List<ScannedMethod>> {
+    fun getMethodsForFiles(physicalPaths: List<String>, buildSessionId: String): Map<FileName, List<ScannedMethod>> {
         
         val buildMap = httpClient.post(
-            url = "v5/agents/builds/$appName/$branchName/$buildName/queryModifiedMethods",
+            url = "v5/agents/builds/$buildSessionId/queryModifiedMethods",
             payload = physicalPaths.joinToString(",", "[", "]") { file -> "\"$file\"" },
             queryParams = mapOf()
         )
@@ -46,7 +46,7 @@ class BuildLinesClient(private val httpClient: HttpClient) {
         return Either.Right(mapValues)
     }
 
-    fun getMethodsForFiles2(physicalPaths: Set<String>, appName: String, branchName: String, buildName: String): Map<FileName, List<ScannedMethod>> {
+    fun getMethodsForFiles2(physicalPaths: Set<String>, buildSessionId: String): Map<FileName, List<ScannedMethod>> {
         return mapOf(
             "src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java" to listOf(
                 ScannedMethod(

@@ -15,14 +15,14 @@ class BuildLineServiceTest : ShouldSpec({
     should("should merge git diff with build scan data") {
         // given
         val buildLinesClientMock = mockk<BuildLinesClient>()
-        every { buildLinesClientMock.getMethodsForFiles(any(), any(), any(), any()) } returns mockedBuildMap()
+        every { buildLinesClientMock.getMethodsForFiles(any(), any()) } returns mockedBuildMap()
         val buildLineService = BuildLineService(buildLinesClientMock)
 
         // and changed detected lines from git
         val gitBasedModifiedLines = prepareGitBasedModifiedLines()
 
         // when
-        val actualMergedMethodNamesEither = buildLineService.mergeMethodNames(gitBasedModifiedLines, "app", "branch", "build")
+        val actualMergedMethodNamesEither = buildLineService.mergeMethodNames(gitBasedModifiedLines, "123-buildSessionId")
 
         // then
         assert(actualMergedMethodNamesEither.isRight())

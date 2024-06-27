@@ -19,6 +19,13 @@ fun Application.configureRouting() {
                 call.respondText(url.readText(), ContentType.Application.Json, HttpStatusCode.OK)
             }
         }
+        
+        get("/sl-api/v1/builds/{buildSessionId}") {
+            val bsid = call.parameters["buildSessionId"]
+            Application::class.java.getResource("/builddata/${bsid}.json")?.let { url ->
+                call.respondText(url.readText(), ContentType.Application.Json, HttpStatusCode.OK)
+            }
+        }
 
         // Static plugin. Try to access `/static/index.html`
         static("/static") {
