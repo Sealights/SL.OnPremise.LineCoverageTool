@@ -5,6 +5,7 @@ data class BuildInfo(
     val appName: String,
     val branchName: String,
     val buildName: String,
+    val buildSessionId: String,
     val referenceBuildSessionId: String,
     val buildMethodology: BuildMethodology
 ) {
@@ -14,7 +15,7 @@ data class BuildInfo(
 
     companion object {
         fun empty() =
-            BuildInfo(commitHash = "null", appName = "", branchName = "", buildName = "", referenceBuildSessionId = "", buildMethodology = BuildMethodology.METHOD)
+            BuildInfo(commitHash = "null", appName = "", branchName = "", buildName = "", buildSessionId = "", referenceBuildSessionId = "", buildMethodology = BuildMethodology.METHOD)
     }
 }
 

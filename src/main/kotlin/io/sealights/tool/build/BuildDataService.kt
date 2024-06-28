@@ -17,20 +17,27 @@ class BuildDataService(
                   * The '--referenceBuildSessionId' parameter was not specified in the command line.
                     The 'Reference build' is not defined for the '--buildSessionId'. Possible first build? 
                   * The '--integrationReferenceBuildSessionId' parameter was not specified in the command line.
-                    The 'Reference build' is not defined for the '--integrationBuildSessionId'. Possible first integration build? 
+                    The 'Reference build' is not defined for the '--integrationBuildSessionId'. Possible first integration build?
             """.trimIndent()
             }
-            throw RuntimeException("BuildSessionId can not be empty")
+            return Either.Left("BuildSessionId can not be empty")
         }
 
         return buildLinesClient.fetchBuildInfo(buildSessionId)
-
-
     }
 
     fun fetchReferenceBuildData(buildInfo: BuildInfo, specifiedReferenceBuildSessionId: String, componentName: String?): Either<String, BuildInfoPair> {
         val referenceBuildSessionId = specifiedReferenceBuildSessionId.ifEmpty { buildInfo.referenceBuildSessionId }
-        return buildLinesClient.fetchBuildInfo(referenceBuildSessionId).flatMap { Either.Right(BuildInfoPair(buildInfo, it)) }
+        if (referenceBuildSessionId.isEmpty()) {
+            log.error { "Neither --referenceBuildSessionId nor --integrationReferenceBuildSessionId were specified and the returned referenceBuildSessionId for build ${buildInfo.buildSessionId} is not available" }
+            log.error { "Check is specified buildSessionId contains preceding build(s)." }
+            return Either.Left("Could not determine referenceBuildSessionId.")
+        }
+        
+        log.info { "Fetching the reference build information for buildSessionId '$referenceBuildSessionId' and component: '$componentName'" }
+        
+        return fetchBuildData(referenceBuildSessionId, componentName)
+            .flatMap { referenceBuildInfo -> Either.Right(BuildInfoPair(buildInfo, referenceBuildInfo)) }
     }
 
     fun validateBuildData(resolvedBuildData: BuildInfoPair): Either<String, BuildInfoPair> {

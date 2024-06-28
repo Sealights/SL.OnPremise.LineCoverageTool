@@ -4,19 +4,19 @@ import arrow.core.Either
 import arrow.core.flatMap
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.sealights.tool.ApplicationProcess
 import io.sealights.tool.HttpClient
 import mu.KotlinLogging
 
 class BuildDataClient(private val httpClient: HttpClient) {
 
     fun fetchBuildInfo(buildSessionId: String): Either<String, BuildInfo> {
-        log.info { "Getting build information for $buildSessionId" }
+        log.info { "Getting build information for buildSessionId '$buildSessionId'" }
         val buildDataResponse = httpClient.get(
             url = "sl-api/v1/builds/${buildSessionId}", queryParams = mapOf()
         )
 
-        return buildDataResponse.flatMap { unmarshallResponse(it) }.flatMap { createBuildInfo(it) }.mapLeft(ApplicationProcess::handleExit)
+        return buildDataResponse.flatMap { unmarshallResponse(it) }
+            .flatMap { createBuildInfo(it) }
     }
 
 
@@ -26,20 +26,34 @@ class BuildDataClient(private val httpClient: HttpClient) {
                 commitHash = responseMap["commitHash"].toString(),
                 appName = responseMap["appName"] as String,
                 branchName = responseMap["branchName"] as String,
-                buildName = (responseMap["build"] as Map<String, Any>)["name"] as String,
-                referenceBuildSessionId = if ((responseMap["isReference"] as Boolean)) responseMap["referenceBuildSessionId"].toString() else "",
-                buildMethodology = buildExecutionMode(responseMap["appName"] as String)
+                buildName = extractOptionalStringValue(responseMap["build"], "name", ""),
+                buildSessionId = extractOptionalStringValue(responseMap["build"], "bsid", ""),
+                referenceBuildSessionId = extractOptionalStringValue(responseMap["refBuild"], "bsid", ""),
+                buildMethodology = buildExecutionMode(responseMap["buildMethodology"] as String)
             )
 
-            log.info { "Build data fetched successfully for build session id 'buildSessionId'" }
-            log.info { "> app / branch / build: ${buildInfo.appName} / ${buildInfo.branchName} / ${buildInfo.buildName},  commitHash: ${buildInfo.commitHash}, reference build: ${buildInfo.referenceBuildSessionId}" }
+            log.info { "Build data fetched successfully for build session id '${buildInfo.buildSessionId}'" }
+            log.info { "> [app / branch / build]: [${buildInfo.appName} / ${buildInfo.branchName} / ${buildInfo.buildName}],  commitHash: ${buildInfo.commitHash}, reference build: ${buildInfo.referenceBuildSessionId}" }
 
             return Either.Right(buildInfo)
         } catch (exception: RuntimeException) {
             log.error(exception) { "Error processing unmarshalled build info data. Enable debug log level to see body returned from server." }
+            responseMap.toString()
             return Either.Left("Processing the response fetched form backend failed. See error messages above")
         }
     }
+
+    private fun <VALUE_TYPE> extractOptionalStringValue(fromMap: Any?, key: String, default: VALUE_TYPE): VALUE_TYPE {
+        try {
+            if ((fromMap as Map<*, *>).containsKey(key)) {
+                return fromMap[key] as VALUE_TYPE
+            }   
+        } catch (ex: RuntimeException) {
+            log.warn(ex) { "Could not extract '$key' value from the response body" }
+        }
+        return default
+    }
+
 
     private fun buildExecutionMode(buildExecutionMode: String): BuildInfo.BuildMethodology {
         return if (buildExecutionMode == "MethodLines") {
