@@ -5,6 +5,7 @@ import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.mainBody
 import io.sealights.tool.build.BuildDataClient
 import io.sealights.tool.build.BuildDataService
+import io.sealights.tool.build.BuildInfoPair
 import io.sealights.tool.buildmap.BuildLineService
 import io.sealights.tool.buildmap.BuildLinesClient
 import io.sealights.tool.configuration.ApplicationArgParser
@@ -31,11 +32,16 @@ fun main(args: Array<String>) = mainBody {
     println(Configuration.workspace)
 
     val httpClient = HttpClient.build()
-    
+
     val buildDataService = BuildDataService(BuildDataClient(httpClient))
-    val buildData = buildDataService.fetchBuildData(Configuration.buildSessionId(), Configuration.componentName)
-    var referenceBuildSessionId = Configuration.referenceBuildSessionId().ifEmpty { buildData.referenceBuildSessionId }
-    val referenceBuildData = buildDataService.fetchBuildData(referenceBuildSessionId, Configuration.componentName)
+    val resolvedBuildData = buildDataService.fetchBuildData(Configuration.buildSessionId(), Configuration.componentName)
+        .flatMap { buildDataService.fetchReferenceBuildData(it,
+            Configuration.referenceBuildSessionId(),
+            Configuration.componentName)
+        }
+        .flatMap { buildDataService.validateBuildData(it) }
+        .mapLeft { ApplicationProcess.handleExit(it) }
+        .getOrNone()
 
 
     val gitDiffProviderService = GitDiffProviderService()
@@ -54,9 +60,9 @@ fun main(args: Array<String>) = mainBody {
         sourceCodeLine
     )
 
-    coverageTool.run("referenceCommitHash")
+    resolvedBuildData.map { coverageTool.run(it) }
 
-    println("Sealights Line Level Coverage end.")
+    println("Sealights Line Level Coverage ended.")
 }
 
 class CoverageTool(
@@ -66,8 +72,8 @@ class CoverageTool(
     private val excelReportFormatter: ExcelReportFormatter,
     private val sourceCodeLine: SourceCodeLineReader
 ) {
-    fun run(referenceCommitHash: String) {
-        gitLinesService.modifiedFileLines(Configuration.workspace, referenceCommitHash, "HEAD")
+    fun run(resolvedBuildData: BuildInfoPair) {
+        gitLinesService.modifiedFileLines(Configuration.workspace, resolvedBuildData.referenceBuildInfo.commitHash, "HEAD")
             .flatMap {
                 buildLineService.mergeMethodNames(
                     gitModifiedLines = it,

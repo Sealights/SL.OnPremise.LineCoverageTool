@@ -17,3 +17,8 @@ data class BuildInfo(
             BuildInfo(commitHash = "null", appName = "", branchName = "", buildName = "", referenceBuildSessionId = "", buildMethodology = BuildMethodology.METHOD)
     }
 }
+
+data class BuildInfoPair(
+    val actualBuildInfo: BuildInfo,
+    val referenceBuildInfo: BuildInfo
+)

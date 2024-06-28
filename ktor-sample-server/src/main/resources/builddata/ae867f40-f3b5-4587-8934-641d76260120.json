@@ -1,0 +1,29 @@
+{
+  "data": {
+    "appName": "LLC_Tool",
+    "build": {
+      "bsid": "ae867f40-f3b5-4587-8934-641d76260120",
+      "name": "third-line-005",
+      "generated": "2024-06-27T11:41:48.789Z",
+      "isIntegration": false
+    },
+    "branchName": "develop",
+    "refBuild": {
+      "name": "third-line-004",
+      "generated": "2024-06-27T10:38:16.922Z",
+      "branchName": "develop",
+      "buildsAgo": 1,
+      "isPinned": false
+    },
+    "buildScanStatus": "Completed",
+    "buildFailureMessage": null,
+    "buildDuration": 10638,
+    "isReference": false,
+    "isPr": false,
+    "components": [],
+    "status": "ended",
+    "technology": "java",
+    "buildMethodology": "MethodLines",
+    "commitHash": "d15629630531f17fffd3c89672725adc17210aba"
+  }
+}

@@ -5,7 +5,7 @@ import kotlin.system.exitProcess
 
 object ApplicationProcess {
 
-    fun handleExit(message: String) {
+    fun handleExit(message: String): String {
         log.info { "Abnormal application exit with reason: $message" }
         exitProcess(2)
     }

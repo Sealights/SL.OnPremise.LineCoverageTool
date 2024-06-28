@@ -1,0 +1,92 @@
+### fetch login token
+POST {{host}}/api/v2/auth/token
+Content-Type: application/json
+
+{
+  "email": "admin@sealights.io",
+  "password": "sealights2016"
+}
+
+### setting coverage mode
+PUT {{host}}/api/v2/coverage-settings
+Authorization:  Bearer eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL0RFVi1sbGMtdG9vbDEuYXV0aC5zZWFsaWdodHMuaW8vIiwiand0aWQiOiJERVYtbGxjLXRvb2wxLG5lZWR0b1JlbW92ZSxBUElHVy0wOTI2YjM3Zi1iODMzLTQ2ZDUtODhmNC03ZTg5YmFhMDA0NDcsMTcxOTQ4ODIzNDQ3MiIsInN1YmplY3QiOiJTZWFMaWdodHNAYWRtaW5Ac2VhbGlnaHRzLmlvIiwiYXVkaWVuY2UiOlsiYXBpUmVhZCIsImFwaVdyaXRlIiwidWkiLCJhZ2VudHMiLCJhZG1pbiIsInVzZXIiLCJ1c2VyLWFkbWluIiwic2VhbGlnaHRzLWFkbWluIl0sIngtc2wtcm9sZSI6InNlYWxpZ2h0cy1hZG1pbiIsIngtc2wtc2VydmVyIjoiaHR0cHM6Ly9ERVYtbGxjLXRvb2wxLWd3LmRldi5zZWFsaWdodHMuY28vYXBpIiwic2xfaW1wZXJfc3ViamVjdCI6IiIsImlhdCI6MTcxOTQ4ODIzNCwiZXhwIjoxNzE5NDk1NDM0fQ.Z7kc1pGpRo8wxXudzldzyIh5p4WwF-c4ISzJuA2mbfCwBAzkfs4t4QRPBplbYR6Gd_xwzrMyWsuOKCJ2d6rYzHRUMtYo37ocJuQuMKjBxipYg4I2GElIFwywOAtr0IBYkeGP-BBE9N6f-skQiCJbyKryEkgw5S1o7LcVThFrLruZPHDuV7IGeDW4jitQuncP4_odS4-L5gqTWPxpAtgO-imdHM9kVywLhUQ1rT_6PGzvXNrDfyIoodr5PnJqdN9cHgJAsX4etM2chZ8Y2omQiaq9otK3hUrAdnyVpwiGNy8j8TGpGXgu8v-rB0O5CvT9n67H8gd_SkY3GIheeAwqwsw0xwB_Crse3sPW52CAqGnTutxKkSaTt74ukJccTrrqjiNJeBxUAvP_chibnpke8AQ8A6PTfR7yKgQamC7rvlrhcG2zLJm8Y7RCULiLunMx1ekbYFDFMAoXtMusKBtrkfOi06hQ2sALnbuv91sipxvUIZpGXMEEtcHGLL8YMhG2lxBOD8DRaFcgUuciuyxwsgEaTRp_oUzp6mneFD2aeiJUSWwqyfa6eaxjVI--feiRNeTJNx5hQJ5ejASxywx452eDVMb6wn_-DSfFeokYPmdSMShFf1RgGaySo2lApFRfro1Fler2sQhC4mAxg_l92Q5kGabp9f0C5U2xEE1ev6Q
+Content-Type: application/json
+
+
+{
+  "appName": "LLC_Tool",
+  "branchName": "develop",
+  "coverageThreshold": 85,
+  "lineThreshold": 200,
+  "showLineCoverage": true
+}
+
+### get methodology
+
+GET  {{host}}/api/v5/agents/builds/{{bsid_004}}/instrumentation-methodology
+Authorization:  Bearer {{token}}
+
+
+### build001
+###
+GET {{host}}/sl-api/v1/builds/{{bsid_001}}
+Authorization:  Bearer {{token}}
+Accept: application/json
+
+### build002
+###
+GET {{host}}/sl-api/v1/builds/{{bsid_002}}
+Authorization:  Bearer {{token}}
+Accept: application/json
+
+### build003
+###
+GET {{host}}/sl-api/v1/builds/{{bsid_003}}
+Authorization:  Bearer {{token}}
+Accept: application/json
+
+### build004
+###
+GET {{host}}/sl-api/v1/builds/{{bsid_004}}
+Authorization:  Bearer {{token}}
+Accept: application/json
+
+### build005
+###
+GET {{host}}/sl-api/v1/builds/{{bsid_005}}
+Authorization:  Bearer {{token}}
+Accept: application/json
+
+###
+### Build maps
+###
+
+POST {{host}}/sl-api/v1/coverage/component/{{bsid_005}}/queryModifiedMethods
+Authorization:  Bearer {{token}}
+Accept: application/json
+
+{
+  “physicalPaths”: [
+    “src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java”,
+    “src/test/java/dev/futa/skipping/HackatonTest.java”,
+    “src/test/java/dev/futa/skipping/SimpleTest.java”
+  ]
+}
+
+###
+### Coverage
+###
+
+POST {{host}}/sl-api/v1/coverage/component/{{bsid_004}}/queryMethodsLineHits
+Authorization:  Bearer {{token}}
+Content-Type: application/json
+x-sl-customerId: SeaLights
+
+{
+  "physicalPaths": [
+    "src/main/java/dev/futa/exec/NewReplicaMainJavaExecClass.java",
+    "src/test/java/dev/futa/skipping/HackatonTest.java",
+    "src/test/java/dev/futa/skipping/SimpleTest.java"
+  ]
+}
+
