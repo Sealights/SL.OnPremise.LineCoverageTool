@@ -23,7 +23,7 @@ class BuildDataClient(private val httpClient: HttpClient) {
     private fun createBuildInfo(responseMap: Map<String, Any>): Either<String, BuildInfo> {
         try {
             val buildInfo = BuildInfo(
-                commitHash = responseMap["commitHash"].toString(),
+                commitHash = responseMap["commitHash"] as String,
                 appName = responseMap["appName"] as String,
                 branchName = responseMap["branchName"] as String,
                 buildName = extractOptionalStringValue(responseMap["build"], "name", ""),
